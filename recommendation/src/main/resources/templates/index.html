@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CinePick - 영화 추천 플랫폼</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+
+        :root {
+          --bg: #0c0d10;
+          --surface: #16181f;
+          --surface-hover: #1e212b;
+          --accent: #e8b84a;
+          --accent-soft: rgba(232, 184, 74, 0.15);
+          --text: #f2f3f5;
+          --muted: #8b909e;
+          --border: rgba(255, 255, 255, 0.06);
+          --radius: 14px;
+          --shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          font-family: "Noto Sans KR", sans-serif;
+          background: var(--bg);
+          color: var(--text);
+          line-height: 1.6;
+        }
+
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .wrap {
+          max-width: 1120px;
+          margin: 0 auto;
+          padding: 0 1.25rem 4rem;
+        }
+
+        header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1.25rem 0;
+          border-bottom: 1px solid var(--border);
+          position: sticky;
+          top: 0;
+          background: rgba(12, 13, 16, 0.92);
+          backdrop-filter: blur(10px);
+          z-index: 10;
+        }
+
+        .logo {
+          font-size: 1.2rem;
+          font-weight: 700;
+        }
+
+        .logo span {
+          color: var(--accent);
+        }
+
+        nav {
+          display: flex;
+          gap: 1.2rem;
+          font-size: 0.9rem;
+          color: var(--muted);
+        }
+
+        nav a:hover {
+          color: var(--text);
+        }
+
+        .hero {
+          padding: 4rem 0;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+
+        @media (min-width: 860px) {
+          .hero {
+            grid-template-columns: 1.1fr 0.9fr;
+          }
+        }
+
+        .date-pill {
+          display: inline-block;
+          padding: 0.25rem 0.7rem;
+          border-radius: 999px;
+          background: var(--accent-soft);
+          color: var(--accent);
+          font-size: 0.75rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+          font-size: 3rem;
+          line-height: 1.2;
+          margin-bottom: 1rem;
+        }
+
+        .hero p {
+          color: var(--muted);
+          max-width: 600px;
+        }
+
+        .cta-row {
+          display: flex;
+          gap: 0.75rem;
+          margin-top: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .btn {
+          padding: 0.8rem 1.4rem;
+          border-radius: 999px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          transition: 0.2s;
+        }
+
+        .btn-primary {
+          background: var(--accent);
+          color: #111;
+        }
+
+        .btn-primary:hover {
+          filter: brightness(1.1);
+        }
+
+        .btn-ghost {
+          background: var(--surface);
+          border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+          background: var(--surface-hover);
+        }
+
+        .search-bar {
+          margin-top: 2rem;
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .search-bar input {
+          flex: 1;
+          padding: 0.8rem 1rem;
+          border-radius: 10px;
+          border: 1px solid var(--border);
+          background: var(--surface);
+          color: white;
+        }
+
+        .hero-card {
+          background: var(--surface);
+          border-radius: var(--radius);
+          border: 1px solid var(--border);
+          padding: 1.5rem;
+          box-shadow: var(--shadow);
+        }
+
+        .hero-card h3 {
+          margin-top: 0;
+          color: var(--muted);
+          font-size: 0.8rem;
+          text-transform: uppercase;
+        }
+
+        .trend-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .trend-list li {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          padding: 1rem 0;
+          border-bottom: 1px solid var(--border);
+        }
+
+        .rank {
+          color: var(--accent);
+          font-weight: 700;
+          width: 20px;
+        }
+
+        .trend-meta {
+          flex: 1;
+        }
+
+        .trend-meta strong {
+          display: block;
+        }
+
+        .trend-meta small {
+          color: var(--muted);
+        }
+
+        section {
+          margin-top: 4rem;
+        }
+
+        .section-head {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 1.5rem;
+        }
+
+        .section-head h2 {
+          margin: 0;
+        }
+
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          gap: 1.25rem;
+        }
+
+        .movie-card {
+          background: var(--surface);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          overflow: hidden;
+          transition: 0.2s;
+        }
+
+        .movie-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(232, 184, 74, 0.2);
+        }
+
+        .poster {
+          aspect-ratio: 2/3;
+          background: linear-gradient(160deg, #2a2438, #12141a);
+          display: flex;
+          align-items: flex-end;
+          padding: 1rem;
+        }
+
+        .poster-badge {
+          background: var(--accent-soft);
+          color: var(--accent);
+          padding: 0.3rem 0.6rem;
+          border-radius: 8px;
+          font-size: 0.7rem;
+          font-weight: 600;
+        }
+
+        .card-body {
+          padding: 1rem;
+        }
+
+        .card-body h3 {
+          margin-top: 0;
+        }
+
+        .card-meta {
+          color: var(--muted);
+          font-size: 0.85rem;
+        }
+
+        .stars {
+          color: var(--accent);
+          margin-top: 0.5rem;
+        }
+
+        .review-snippet {
+          color: var(--muted);
+          font-size: 0.9rem;
+        }
+
+        footer {
+          margin-top: 5rem;
+          padding-top: 2rem;
+          border-top: 1px solid var(--border);
+          text-align: center;
+          color: var(--muted);
+          font-size: 0.85rem;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <header>
+
+        <a href="/" class="logo">
+            Cine<span>Pick</span>
+        </a>
+
+        <nav>
+
+            <a href="#recommend">추천</a>
+            <a href="#reviews">리뷰</a>
+            <a href="#trending">인기</a>
+
+            <!-- 로그인 안한 상태 -->
+            <span th:if="${session.user == null}">
+        <a href="/login">로그인</a>
+        <a href="/signup">회원가입</a>
+    </span>
+
+            <!-- 로그인 한 상태 -->
+            <span th:if="${session.user != null}">
+        <span th:text="${session.user.username}"></span>님
+        <a href="/logout">로그아웃</a>
+    </span>
+
+        </nav>
+
+
+    </header>
+
+    <div class="hero">
+
+        <div>
+
+            <span class="date-pill">2026.05 기준</span>
+
+            <h1>
+                지금 극장에서<br>
+                무엇을 볼까요?
+            </h1>
+
+            <p>
+                사용자 리뷰와 평점을 기반으로
+                당신에게 맞는 영화를 추천합니다.
+            </p>
+
+            <div class="cta-row">
+
+                <a href="#recommend" class="btn btn-primary">
+                    맞춤 추천 받기
+                </a>
+
+                <a href="#reviews" class="btn btn-ghost">
+                    최신 리뷰 보기
+                </a>
+
+            </div>
+
+            <div class="search-bar">
+
+                <input type="search" placeholder="영화 제목 검색..." />
+
+                <button class="btn btn-primary">
+                    검색
+                </button>
+
+            </div>
+
+        </div>
+
+        <aside class="hero-card" id="trending">
+
+            <h3>인기 영화 TOP 5</h3>
+
+            <ul class="trend-list">
+
+                <li>
+                    <span class="rank">1</span>
+                    <div class="trend-meta">
+                        <strong>슈퍼 마리오 갤럭시 무비</strong>
+                        <small>애니메이션</small>
+                    </div>
+                </li>
+
+                <li>
+                    <span class="rank">2</span>
+                    <div class="trend-meta">
+                        <strong>악마는 프라다를 입는다 2</strong>
+                        <small>코미디</small>
+                    </div>
+                </li>
+
+                <li>
+                    <span class="rank">3</span>
+                    <div class="trend-meta">
+                        <strong>살목지</strong>
+                        <small>공포</small>
+                    </div>
+                </li>
+
+            </ul>
+
+        </aside>
+
+    </div>
+
+    <section id="recommend">
+
+        <div class="section-head">
+            <h2>이번 주 추천 영화</h2>
+        </div>
+
+        <div class="grid">
+
+            <article class="movie-card">
+
+                <div class="poster">
+                    <span class="poster-badge">TOP 1</span>
+                </div>
+
+                <div class="card-body">
+
+                    <h3>슈퍼 마리오 갤럭시 무비</h3>
+
+                    <div class="card-meta">
+                        2026 · 애니메이션
+                    </div>
+
+                    <div class="stars">
+                        ★★★★☆
+                    </div>
+
+                    <p class="review-snippet">
+                        가족과 함께 보기 좋은 극장 애니메이션.
+                    </p>
+
+                </div>
+
+            </article>
+
+            <article class="movie-card">
+
+                <div class="poster">
+                    <span class="poster-badge">추천작</span>
+                </div>
+
+                <div class="card-body">
+
+                    <h3>프로젝트 헤일 메리</h3>
+
+                    <div class="card-meta">
+                        2026 · SF
+                    </div>
+
+                    <div class="stars">
+                        ★★★★★
+                    </div>
+
+                    <p class="review-snippet">
+                        SF 팬들에게 강력 추천되는 작품.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <section id="reviews">
+
+        <div class="section-head">
+            <h2>최신 리뷰</h2>
+        </div>
+
+        <div class="grid">
+
+            <article class="movie-card">
+
+                <div class="poster">
+                    <span class="poster-badge">리뷰 HOT</span>
+                </div>
+
+                <div class="card-body">
+
+                    <h3>오디션 109</h3>
+
+                    <div class="card-meta">
+                        한국 드라마
+                    </div>
+
+                    <div class="stars">
+                        ★★★★☆
+                    </div>
+
+                    <p class="review-snippet">
+                        청춘 성장 스토리가 인상적인 영화.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <footer>
+        © 2026 CinePick - Movie Recommendation Platform
+    </footer>
+
+</div>
+
+</body>
+</html>
+```
