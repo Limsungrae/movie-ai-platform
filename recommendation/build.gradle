@@ -24,6 +24,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+//    26.05.12 CSV 라이브러리 추가
+    implementation 'com.opencsv:opencsv:5.9'
+
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
 

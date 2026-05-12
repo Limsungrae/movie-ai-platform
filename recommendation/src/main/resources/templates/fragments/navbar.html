@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<header th:fragment="navbar">
+
+    <a href="/" class="logo">
+        Cine<span>Pick</span>
+    </a>
+
+    <nav>
+
+        <a href="#recommend">추천</a>
+        <a href="#reviews">리뷰</a>
+        <a href="#trending">인기</a>
+        <a href="/movies">영화목록</a>
+
+        <!-- 로그인 안한 상태 -->
+        <span th:if="${session.user == null}">
+            <a href="/login">로그인</a>
+            <a href="/signup">회원가입</a>
+        </span>
+
+        <!-- 로그인 한 상태 -->
+        <span th:if="${session.user != null}">
+            <span th:text="${session.user.username}"></span>님
+            <a href="/logout">로그아웃</a>
+        </span>
+
+    </nav>
+
+</header>
+
+</body>
+</html>

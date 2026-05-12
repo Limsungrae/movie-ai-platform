@@ -22,11 +22,19 @@ public class Movie {
     // 감독
     private String director;
 
-    // 포스터 이미지 URL
+    // 배우
+    @Column(length = 1000)
+    private String actors;
+
+    // 개봉일
+    private String releaseDate;
+
+    // 포스터 이미지
+    @Column(length = 1000)
     private String posterUrl;
 
     // 줄거리
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String description;
 
     // 평균 평점
