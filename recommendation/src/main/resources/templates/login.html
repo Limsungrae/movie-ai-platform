@@ -1,21 +1,51 @@
 <!DOCTYPE html>
+<html lang = "ko"></html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineFeel 로그인</title>
+    <link rel="stylesheet" href="../static/css/login.css">
 </head>
 <body>
+<div class="login-page">
+    <div class="dark-overlay"></div>
 
-<h2>로그인</h2>
+    <header class="logo">
+        CineFeel
+    </header>
 
-<form action="/login" method="post">
-    <input type="text" name="username" placeholder="아이디">
-    <input type="password" name="password" placeholder="비밀번호">
-    <button type="submit">로그인</button>
-</form>
+    <main class="login-box">
+        <h1>로그인</h1>
+        <p class="sub-text">리뷰 감성을 분석하고 취향에 맞는 영화를 추천받아보세요.</p>
 
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+        <form>
+            <div class="input-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" placeholder="이메일을 입력하세요" />
+            </div>
 
-<a href="/signup">회원가입</a>
+            <div class="input-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요" />
+            </div>
 
+            <button type="submit" class="login-btn">로그인</button>
+
+            <div class="login-options">
+                <label>
+                    <input type="checkbox" />
+                    로그인 상태 유지
+                </label>
+                <a href="#">비밀번호 찾기</a>
+            </div>
+        </form>
+
+        <p class="signup-text">
+            아직 계정이 없나요?
+            <a th:href="@{/signup}">회원가입</a>
+        </p>
+    </main>
+</div>
 </body>
 </html>

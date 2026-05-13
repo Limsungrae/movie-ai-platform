@@ -2,32 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<header th:fragment="navbar">
+<header class="navbar" th:fragment="navbar">
 
-    <a href="/" class="logo">
-        Cine<span>Pick</span>
-    </a>
+    <div class="nav-left">
 
-    <nav>
+        <a href="/" class="logo">
+            Cine<span>Pick</span>
+        </a>
 
-        <a href="#recommend">추천</a>
-        <a href="#reviews">리뷰</a>
-        <a href="#trending">인기</a>
-        <a href="/movies">영화목록</a>
+        <div class="nav-menu">
+            <a href="#recommend">추천</a>
+            <a href="#reviews">리뷰</a>
+            <a href="#my">마이페이지</a>
+            <a href="/movie/list">영화목록</a>
+        </div>
+
+    </div>
+
+    <div class="nav-right">
+
+        <input type="text"
+               class="search-input"
+               placeholder="영화를 검색하세요">
 
         <!-- 로그인 안한 상태 -->
-        <span th:if="${session.user == null}">
+        <div class="auth-menu" th:if="${session.user == null}">
             <a href="/login">로그인</a>
             <a href="/signup">회원가입</a>
-        </span>
+        </div>
 
         <!-- 로그인 한 상태 -->
-        <span th:if="${session.user != null}">
-            <span th:text="${session.user.username}"></span>님
+        <div class="auth-menu" th:if="${session.user != null}">
+            <span th:text="${session.user.username} + '님'"></span>
             <a href="/logout">로그아웃</a>
-        </span>
+        </div>
 
-    </nav>
+    </div>
 
 </header>
 

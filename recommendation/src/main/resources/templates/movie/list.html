@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>영화 목록</title>
+
+    <link rel="stylesheet" th:href="@{/css/movie.css}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <section class="movie-page">
+
+        <div class="movie-header">
+
+            <h1>🎬 영화 목록</h1>
+
+            <!-- 검색창 -->
+            <input type="text"
+                   placeholder="영화 제목 검색">
+
+        </div>
+
+        <!-- 영화 목록 -->
+        <div class="movie-grid">
+
+            <!-- 영화 반복 -->
+            <div class="movie-card"
+                 th:each="movie : ${paging}">
+
+                <!-- 포스터 -->
+                <img th:src="${movie.posterUrl}">
+
+                <div class="movie-info">
+
+                    <!-- 제목 -->
+                    <h3 th:text="${movie.title}"></h3>
+
+                    <!-- 장르 -->
+                    <p th:text="${movie.genre}"></p>
+
+                    <!-- 평점 -->
+                    <span>
+                        ⭐ <span th:text="${movie.rating}"></span>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination">
+
+            <!-- 이전 버튼 -->
+            <a th:if="${paging.hasPrevious()}"
+               th:href="@{/movie/list(page=${paging.number - 1})}">
+                이전
+            </a>
+
+            <!-- 현재 페이지 -->
+            <span th:text="${paging.number + 1}"></span>
+
+            <!-- 다음 버튼 -->
+            <a th:if="${paging.hasNext()}"
+               th:href="@{/movie/list(page=${paging.number + 1})}">
+                다음
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>
