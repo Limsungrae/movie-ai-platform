@@ -1,51 +1,64 @@
 package com.movie.recommendation.controller;
 
 import com.movie.recommendation.entity.Movie;
+import com.movie.recommendation.entity.Review;
 import com.movie.recommendation.service.MovieService;
-
+import com.movie.recommendation.service.ReviewService;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class MovieController {
 
-    // MovieService 연결
     private final MovieService movieService;
+    private final ReviewService reviewService;
 
-    // 생성자 주입
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService,
+                           ReviewService reviewService) {
+
         this.movieService = movieService;
+        this.reviewService = reviewService;
     }
 
-    /*
-     영화 목록 페이지
-
-     예시 URL
-     /movie/list?page=0
-     /movie/list?page=1
-    */
+    // 영화 목록 페이지
     @GetMapping("/movie/list")
-    public String movieList(
+    public String movieList(Model model,
 
-            // 현재 페이지 번호
-            // 기본값은 0 (첫 페이지)
-            @RequestParam(value = "page",
-                    defaultValue = "0")
-            int page,
+                            // 한 페이지에 6개씩 출력
+                            @PageableDefault(size = 6) Pageable pageable) {
 
-            Model model) {
+        // 페이지 형태로 영화 조회
+        Page<Movie> moviePage =
+                movieService.getMovieList(pageable);
 
-        // 서비스에서 페이지별 영화 데이터 가져오기
-        Page<Movie> paging = movieService.getMovieList(page);
+        // html 로 데이터 전달
+        model.addAttribute("paging", moviePage);
 
-        // HTML로 데이터 전달
-        model.addAttribute("paging", paging);
-
-        // movie/list.html 로 이동
         return "movie/list";
+    }
+
+    // 영화 상세 페이지
+    @GetMapping("/movie/detail/{id}")
+    public String movieDetail(@PathVariable Long id,
+                              Model model) {
+
+        // 영화 1개 조회
+        Movie movie = movieService.getMovie(id);
+
+        // 해당 영화 리뷰 목록 조회
+        List<Review> reviews =
+                reviewService.getReviews(movie);
+
+        // html 로 전달
+        model.addAttribute("movie", movie);
+        model.addAttribute("reviews", reviews);
+
+        return "movie/detail";
     }
 }

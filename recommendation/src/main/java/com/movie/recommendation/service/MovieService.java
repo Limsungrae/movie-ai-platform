@@ -8,7 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 @Service
 public class MovieService {
 
@@ -34,6 +35,23 @@ public class MovieService {
         Pageable pageable = PageRequest.of(page, 6);
 
         // DB에서 영화 데이터를 페이지 단위로 가져옴
+        return movieRepository.findAll(pageable);
+    }
+    // 영화 상세 조회
+    public Movie getMovie(Long id){
+
+    /*
+     findById(id)
+     → Optional<Movie> 반환
+
+     없으면 예외 발생
+    */
+        return movieRepository.findById(id)
+                .orElseThrow();
+    }
+    // 영화 목록 조회 (페이징)
+    public Page<Movie> getMovieList(Pageable pageable) {
+
         return movieRepository.findAll(pageable);
     }
 }

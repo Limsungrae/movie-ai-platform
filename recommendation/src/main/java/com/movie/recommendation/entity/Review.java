@@ -11,28 +11,34 @@ import java.time.LocalDateTime;
 @Setter
 public class Review {
 
+    // 리뷰 PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 리뷰 작성자
-    @ManyToOne
-    private User user;
-
-    // 리뷰 대상 영화
-    @ManyToOne
+    // 어떤 영화 리뷰인지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_id")
     private Movie movie;
+
+    // 어떤 사용자인지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // 리뷰 내용
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    // 감정분석 결과
+    // 감정 분석 결과
+    // ex) POSITIVE / NEGATIVE
     private String sentiment;
 
-    // 긍정 점수
-    private double score;
+    // AI가 예측한 평점
+    // ex) 4.7
+    private Double predictedRating;
 
-    // 작성 시간
-    private LocalDateTime createdAt;
+    // 리뷰 작성일
+    private LocalDateTime createDate;
+
 }

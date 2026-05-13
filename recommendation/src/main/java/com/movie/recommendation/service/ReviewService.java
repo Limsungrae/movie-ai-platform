@@ -23,21 +23,36 @@ public class ReviewService {
 
         Review review = new Review();
 
+        // 사용자 정보 저장
         review.setUser(user);
+
+        // 영화 정보 저장
         review.setMovie(movie);
+
+        // 리뷰 내용 저장
         review.setContent(content);
 
-        // 임시 감정분석
+        // -----------------------------
+        // 임시 AI 감정분석 결과
+        // 나중에 Python AI 서버 연결 예정
+        // -----------------------------
+
+        // 감정 분석 결과
         review.setSentiment("POSITIVE");
-        review.setScore(0.95);
 
-        review.setCreatedAt(LocalDateTime.now());
+        // AI 예측 평점
+        review.setPredictedRating(4.8);
 
+        // 리뷰 작성 시간
+        review.setCreateDate(LocalDateTime.now());
+
+        // DB 저장
         reviewRepository.save(review);
     }
 
-    // 영화 리뷰 조회
+    // 특정 영화 리뷰 조회
     public List<Review> getReviews(Movie movie) {
+
         return reviewRepository.findByMovie(movie);
     }
 }

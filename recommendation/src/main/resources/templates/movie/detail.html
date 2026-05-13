@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title th:text="${movie.title}"></title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/detail.css}">
+
+    <!-- 폰트 -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <!-- 상세 페이지 -->
+    <section class="detail-page">
+
+        <!-- 영화 포스터 -->
+        <div class="poster-box">
+
+            <img th:src="${movie.posterUrl}"
+                 alt="영화포스터">
+
+        </div>
+
+        <!-- 영화 정보 -->
+        <div class="detail-info">
+
+            <!-- 제목 -->
+            <h1 th:text="${movie.title}"></h1>
+
+            <!-- 장르 -->
+            <p class="genre"
+               th:text="${movie.genre}"></p>
+
+            <!-- 평점 -->
+            <div class="rating">
+
+                ⭐ <span th:text="${movie.rating}"></span>
+
+            </div>
+
+            <!-- 감독 -->
+            <div class="info-item">
+
+                <h3>감독</h3>
+
+                <p th:text="${movie.director}"></p>
+
+            </div>
+
+            <!-- 배우 -->
+            <div class="info-item">
+
+                <h3>출연</h3>
+
+                <p th:text="${movie.actors}"></p>
+
+            </div>
+
+            <!-- 줄거리 -->
+            <div class="info-item">
+
+                <h3>줄거리</h3>
+
+                <p th:text="${movie.description}"></p>
+
+            </div>
+
+            <!-- 뒤로가기 -->
+            <a href="/movie/list"
+               class="back-btn">
+
+                ← 목록으로
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>
