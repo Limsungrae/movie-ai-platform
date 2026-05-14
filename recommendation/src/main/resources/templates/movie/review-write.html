@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>리뷰 작성 - CineFeel</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet"
+          th:href="@{/css/review-write.css}">
+</head>
+
+<body>
+
+<div class="review-page">
+
+    <!-- ================= 리뷰 카드 ================= -->
+    <div class="review-card">
+
+        <!-- ================= 영화 요약 정보 ================= -->
+        <div class="movie-summary">
+
+            <!-- 영화 포스터 -->
+            <img th:src="${movie.posterUrl}"
+                 alt="영화 포스터"
+                 class="summary-poster">
+
+            <!-- 영화 정보 -->
+            <div>
+
+                <!-- 영화 제목 -->
+                <h1 th:text="${movie.title}">
+                    인터스텔라
+                </h1>
+
+                <!-- 장르 / 연도 / 러닝타임 -->
+                <p>
+
+                    <!-- 장르 -->
+                    <span th:text="${movie.genre}">
+                        SF
+                    </span>
+
+                    /
+
+                    <!-- 개봉년도 -->
+                    <span th:text="${movie.releaseDate}">
+                        2014
+                    </span>
+
+                    /
+
+                    <!-- 러닝타임 -->
+                    <span>
+                        169분
+                    </span>
+
+                </p>
+
+                <!-- 평점 -->
+                <strong>
+                    ⭐
+                    <span th:text="${movie.rating}">
+                        4.8
+                    </span>
+                </strong>
+
+            </div>
+
+        </div>
+
+        <!-- ================= 리뷰 작성 폼 ================= -->
+        <form th:action="@{/movie/review/{id}(id=${movie.id})}"
+              method="post"
+              class="review-form">
+
+            <!-- 제목 -->
+            <h2>리뷰를 작성해주세요</h2>
+
+            <!-- 안내 문구 -->
+            <p class="question">
+                이 영화는 어떤 느낌이었나요?
+            </p>
+
+            <!-- 리뷰 입력 -->
+            <textarea name="content"
+                      maxlength="500"
+                      required
+                      placeholder="영화를 보고 느낀 감정을 자유롭게 작성해주세요."></textarea>
+
+            <!-- 안내 -->
+            <p class="tip">
+                ⓘ 욕설, 비방, 스포일러성 내용은 제한될 수 있어요.
+            </p>
+
+            <!-- 제출 버튼 -->
+            <button type="submit"
+                    class="review-btn">
+
+                감성 분석하기
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

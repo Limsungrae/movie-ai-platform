@@ -1,93 +1,150 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
+    <title>영화 상세</title>
 
-    <title th:text="${movie.title}"></title>
-
-    <!-- CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/detail.css}">
-
-    <!-- 폰트 -->
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
-          rel="stylesheet">
+    <!-- CSS 연결 -->
+    <link rel="stylesheet" th:href="@{/css/movie-detail.css}">
 </head>
 
 <body>
 
-<div class="container">
+<div class="detail-page">
 
-    <!-- navbar -->
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
 
-    <!-- 상세 페이지 -->
-    <section class="detail-page">
+        <a class="logo" th:href="@{/}">CineFeel</a>
 
-        <!-- 영화 포스터 -->
-        <div class="poster-box">
+        <nav>
+            <a th:href="@{/}">홈</a>
+            <a th:href="@{/movies}">영화</a>
+            <a th:href="@{/analysis}">리뷰분석</a>
+            <a th:href="@{/recommend}">추천</a>
+            <a th:href="@{/mypage}">마이페이지</a>
+        </nav>
 
-            <img th:src="${movie.posterUrl}"
-                 alt="영화포스터">
-
+        <div class="nav-icons">
+            <span>🔍</span>
+            <span>👤</span>
         </div>
 
-        <!-- 영화 정보 -->
-        <div class="detail-info">
+    </header>
+
+    <!-- ================= MOVIE DETAIL ================= -->
+    <main class="detail-card">
+
+        <!-- ===== POSTER ===== -->
+        <section class="poster-area">
+
+            <div class="main-poster">
+
+                <!-- 포스터 있을 때 -->
+                <img th:if="${movie.posterUrl != null}"
+                     th:src="${movie.posterUrl}"
+                     alt="movie poster">
+
+                <!-- 포스터 없을 때 -->
+                <div th:if="${movie.posterUrl == null}"
+                     class="poster-placeholder">
+                    NO IMAGE
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ===== INFO ===== -->
+        <section class="info-area">
 
             <!-- 제목 -->
-            <h1 th:text="${movie.title}"></h1>
-
-            <!-- 장르 -->
-            <p class="genre"
-               th:text="${movie.genre}"></p>
+            <h1 th:text="${movie.title}">영화 제목</h1>
 
             <!-- 평점 -->
             <div class="rating">
+                <span class="star">★</span>
 
-                ⭐ <span th:text="${movie.rating}"></span>
+                <!-- null 방어 -->
+                <strong th:text="${movie.rating} ?: 0">0.0</strong>
+
+                <span>평점</span>
+            </div>
+
+            <!-- 장르 -->
+            <div class="tag-list">
+                <span th:text="${movie.genre}">Genre</span>
+            </div>
+
+            <!-- 감독 / 개봉 -->
+            <div class="movie-info">
+
+                <p>
+                    <strong>감독</strong>
+                    <span th:text="${movie.director} ?: '정보 없음'"></span>
+                </p>
+
+                <p>
+                    <strong>개봉</strong>
+                    <span th:text="${movie.releaseDate} ?: '-'"></span>
+                </p>
 
             </div>
 
-            <!-- 감독 -->
-            <div class="info-item">
+            <!-- 설명 -->
+            <p class="description"
+               th:text="${movie.description} ?: '설명이 없습니다.'">
+            </p>
 
-                <h3>감독</h3>
+            <!-- ================= REVIEW FORM ================= -->
+            <!-- 리뷰 작성 페이지 이동 버튼 -->
+            <div class="review-btn-area">
 
-                <p th:text="${movie.director}"></p>
-
-            </div>
-
-            <!-- 배우 -->
-            <div class="info-item">
-
-                <h3>출연</h3>
-
-                <p th:text="${movie.actors}"></p>
+                <a th:href="@{/movie/review/{id}(id=${movie.id})}"
+                   class="main-btn">
+                    리뷰 작성하기
+                </a>
 
             </div>
 
-            <!-- 줄거리 -->
-            <div class="info-item">
+        </section>
 
-                <h3>줄거리</h3>
+    </main>
 
-                <p th:text="${movie.description}"></p>
+    <!-- ================= REVIEW LIST ================= -->
+    <section class="review-section">
+
+        <h2>리뷰 목록</h2>
+
+        <!-- 리뷰 없을 때 -->
+        <div th:if="${#lists.isEmpty(reviews)}">
+            <p style="color:#777;">아직 리뷰가 없습니다.</p>
+        </div>
+
+        <!-- 리뷰 있을 때 -->
+        <div class="review-card"
+             th:each="review : ${reviews}">
+
+            <div class="review-header">
+
+                <!-- LAZY 안전 처리 -->
+                <strong th:text="${review.user != null ? review.user.username : '익명'}">
+                    user
+                </strong>
+
+                <!-- 감정 분석 -->
+                <span class="sentiment"
+                      th:text="${review.sentiment} ?: 'UNKNOWN'">
+                    sentiment
+                </span>
 
             </div>
 
-            <!-- 뒤로가기 -->
-            <a href="/movie/list"
-               class="back-btn">
-
-                ← 목록으로
-
-            </a>
+            <!-- 리뷰 내용 -->
+            <p th:text="${review.content}">
+                review content
+            </p>
 
         </div>
 

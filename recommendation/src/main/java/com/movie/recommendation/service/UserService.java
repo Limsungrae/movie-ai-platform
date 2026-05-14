@@ -19,14 +19,22 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User login(String username, String password) {
+    public User login(String email, String password) {
 
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             return user.get();
         }
 
         return null;
+    }
+    /**
+     * 이메일 중복 체크
+     */
+    public boolean existsByEmail(String email) {
+
+        return userRepository.findByEmail(email)
+                .isPresent();
     }
 }

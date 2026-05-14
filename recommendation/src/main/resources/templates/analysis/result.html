@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>분석 결과 - CineFeel</title>
+
+    <!-- CSS 연결 -->
+    <link rel="stylesheet"
+          th:href="@{/css/sentiment-result.css}">
+</head>
+
+<body>
+
+<div class="result-page">
+
+    <main class="result-container">
+
+        <!-- 타이틀 -->
+        <div class="result-title-wrap">
+
+            <div class="mini-brand">
+                ✦ CINEFEEL
+            </div>
+
+            <h1>
+                분석 결과 <span>& 추천 영화</span>
+            </h1>
+
+        </div>
+
+        <!-- 결과 카드 -->
+        <section class="result-card">
+
+            <h2>당신의 리뷰 분석 결과</h2>
+
+            <div class="result-summary">
+
+                <!-- 감정 분석 카드 -->
+                <div class="sentiment-box">
+
+                    <!-- 긍정/부정 따라 이모지 변경 -->
+                    <div class="face"
+                         th:text="${result.sentiment == 'POSITIVE'} ? '😊' : '😢'">
+                    </div>
+
+                    <div>
+
+                        <!-- 감정 -->
+                        <h3 th:text="${result.sentiment == 'POSITIVE'} ? '긍정 리뷰' : '부정 리뷰'">
+                            긍정 리뷰
+                        </h3>
+
+                        <p>긍정 확률</p>
+
+                        <!-- 긍정 퍼센트 -->
+                        <strong>
+                            <span th:text="${result.positivePercent}"></span>%
+                        </strong>
+
+                    </div>
+
+                    <!-- progress -->
+                    <div class="progress">
+
+                        <div class="progress-fill"
+
+                             th:style="'width:' + ${result.positivePercent} + '%'">
+                        </div>
+
+                    </div>
+
+                    <!-- 비율 -->
+                    <div class="ratio-row">
+
+                        <span class="positive">
+                            ● 긍정
+                            <span th:text="${result.positivePercent}"></span>%
+                        </span>
+
+                        <span class="negative">
+                            ● 부정
+                            <span th:text="${result.negativePercent}"></span>%
+                        </span>
+
+                    </div>
+
+                    <!-- AI 요약 -->
+                    <p class="summary-text"
+                       th:text="${result.aiComment}">
+                    </p>
+
+                </div>
+
+                <!-- 분석 기준 -->
+                <div class="standard-box">
+
+                    <h3>분석 기준</h3>
+
+                    <div class="standard-row">
+
+                        <span>리뷰 감성</span>
+
+                        <strong class="positive"
+                                th:text="${result.sentiment}">
+                        </strong>
+
+                    </div>
+
+                    <div class="standard-row">
+
+                        <span>긍정 비율</span>
+
+                        <strong class="positive">
+                            <span th:text="${result.positivePercent}"></span>%
+                        </strong>
+
+                    </div>
+
+                    <div class="standard-row">
+
+                        <span>부정 비율</span>
+
+                        <strong class="negative">
+                            <span th:text="${result.negativePercent}"></span>%
+                        </strong>
+
+                    </div>
+
+                    <div class="standard-row">
+
+                        <span>추천 기준</span>
+
+                        <strong>
+                            유사 감정 영화 추천
+                        </strong>
+
+                    </div>
+
+                    <div class="standard-row">
+
+                        <span>AI 예상 평점</span>
+
+                        <strong>
+                            ⭐
+                            <span th:text="${#numbers.formatDecimal(review.predictedRating,1,1)}"></span>                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 추천 영화 -->
+            <div class="recommend-section">
+
+                <h2>감성 분석 기반 추천 영화</h2>
+
+                <p>
+                    AI가 리뷰 감정을 기반으로 추천한 영화입니다.
+                </p>
+                <div th:if="${#lists.isEmpty(result.recommendations)}">
+
+                    <p style="color:#999;">
+                        추천 영화가 없습니다.
+                    </p>
+
+                </div>
+
+                <div class="recommend-grid">
+
+                    <!-- 추천 영화 반복 -->
+                    <a class="recommend-card"
+                       th:each="movie : ${result.recommendations}"
+                       th:href="@{/movie/detail/{id}(id=${movie.movieId})}">
+
+                        <!-- 포스터 -->
+                        <img th:src="${movie.posterUrl != null
+                           ? movie.posterUrl
+                           : '/images/no-image.png'}">
+
+                        <!-- 영화 정보 -->
+                        <div>
+
+                            <!-- 제목 -->
+                            <h3 th:text="${movie.title}"></h3>
+
+                            <!-- 평점 -->
+                            <span>
+                    ⭐
+                    <span th:text="${movie.rating}"></span>
+                </span>
+
+                            <!-- 매칭률 -->
+                            <p>
+                                매칭률
+                                <span th:text="${movie.matchScore}"></span>%
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

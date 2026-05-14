@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineFeel 회원가입</title>
 
-    <link rel="stylesheet" href="../static/css/signup.css">
+    <link rel="stylesheet" th:href="@{/css/signup.css}">
 
 </head>
 
@@ -25,7 +25,10 @@
         <p class="sub-text">
             나만의 영화 취향을 분석하고 감성 기반 추천을 받아보세요.
         </p>
-
+        <p th:if="${error}"
+           th:text="${error}"
+           style="color:red; margin-bottom:15px;">
+        </p>
         <form action="/signup" method="post">
 
             <div class="input-group">

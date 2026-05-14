@@ -40,7 +40,7 @@ public class AuthController {
     @PostMapping("/login")
     public String login(User user, HttpSession session, Model model) {
 
-        User loginUser = userService.login(user.getUsername(), user.getPassword());
+        User loginUser = userService.login(user.getEmail(), user.getPassword());
 
         if (loginUser != null) {
             session.setAttribute("user", loginUser);

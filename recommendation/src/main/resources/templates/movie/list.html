@@ -36,8 +36,9 @@
         <div class="movie-grid">
 
             <!-- 영화 반복 -->
-            <div class="movie-card"
-                 th:each="movie : ${paging}">
+            <a class="movie-card"
+               th:each="movie : ${paging.content}"
+               th:href="@{/movie/detail/{id}(id=${movie.id})}">
 
                 <!-- 포스터 -->
                 <img th:src="${movie.posterUrl}">
@@ -52,12 +53,12 @@
 
                     <!-- 평점 -->
                     <span>
-                        ⭐ <span th:text="${movie.rating}"></span>
-                    </span>
+                ⭐ <span th:text="${movie.rating}"></span>
+            </span>
 
                 </div>
 
-            </div>
+            </a>
 
         </div>
 
