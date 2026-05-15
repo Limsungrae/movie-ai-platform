@@ -70,4 +70,7 @@ public class ReviewService {
 
         return reviewRepository.findByMovie(movie);
     }
+    public List<Review> getMyReviews(User user) {
+        return reviewRepository.findByUser(user);
+    }
 }

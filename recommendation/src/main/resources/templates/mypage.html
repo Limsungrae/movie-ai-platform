@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지 - CineFeel</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/mypage.css}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="mypage-wrap">
+
+    <!-- ================= 사이드바 ================= -->
+    <aside class="mypage-sidebar">
+
+        <a th:href="@{/}" class="sidebar-logo">
+            CineFeel
+        </a>
+
+        <ul class="menu-list">
+
+            <li>
+                <button class="menu-btn active"
+                        onclick="showTab(event, 'profile')">
+
+                    <span class="menu-icon">◉</span>
+                    <span>내 정보</span>
+
+                </button>
+            </li>
+
+            <li>
+                <button class="menu-btn"
+                        onclick="showTab(event, 'writtenReviews')">
+
+                    <span class="menu-icon">✎</span>
+                    <span>작성한 리뷰</span>
+
+                </button>
+            </li>
+
+            <li>
+                <button class="menu-btn"
+                        onclick="showTab(event, 'genre')">
+
+                    <span class="menu-icon">◇</span>
+                    <span>선호 장르</span>
+
+                </button>
+            </li>
+
+            <li>
+                <a th:href="@{/logout}"
+                   style="text-decoration:none;">
+
+                    <button class="menu-btn"
+                            type="button">
+
+                        <span class="menu-icon">↩</span>
+                        <span>로그아웃</span>
+
+                    </button>
+
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- ================= 메인 ================= -->
+    <main class="mypage-content">
+
+        <!-- ================= 내 정보 ================= -->
+        <section id="profile"
+                 class="content-section active-section">
+
+            <h2>내 정보</h2>
+
+            <div class="profile-card">
+
+                <div class="profile-image">
+                    👤
+                </div>
+
+                <div class="profile-info">
+
+                    <!-- 유저 이름 -->
+                    <h3 th:text="${user.username}">
+                        username
+                    </h3>
+
+                    <!-- 이메일 -->
+                    <p th:text="${user.email}">
+                        email
+                    </p>
+
+                    <div class="profile-tags">
+
+                        <span>
+                            긍정 리뷰
+                            <span th:text="${positiveCount}"></span>개
+                        </span>
+
+                        <span>
+                            부정 리뷰
+                            <span th:text="${negativeCount}"></span>개
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= 작성 리뷰 ================= -->
+        <section id="writtenReviews"
+                 class="content-section">
+
+            <h2>작성한 리뷰</h2>
+
+            <p class="section-desc">
+                내가 작성한 리뷰와 감성 분석 결과를 확인할 수 있어요.
+            </p>
+
+            <!-- 리뷰 통계 -->
+            <div class="review-summary-grid">
+
+                <div class="summary-card positive-card">
+
+                    <span>긍정 리뷰</span>
+
+                    <strong th:text="${positiveCount} + '개'">
+                        0개
+                    </strong>
+
+                </div>
+
+                <div class="summary-card negative-card">
+
+                    <span>부정 리뷰</span>
+
+                    <strong th:text="${negativeCount} + '개'">
+                        0개
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <!-- 리뷰 반복 -->
+            <div th:each="review : ${reviews}"
+                 class="my-review-card">
+
+                <!-- 상단 -->
+                <div class="review-top">
+
+                    <div>
+
+                        <!-- 영화 제목 -->
+                        <div class="review-movie-title"
+                             th:text="${review.movie.title}">
+
+                            영화 제목
+                        </div>
+
+                        <!-- 날짜 -->
+                        <span class="review-date"
+                              th:text="${#temporals.format(review.createDate, 'yyyy.MM.dd')}">
+
+                            2026.05.15
+                        </span>
+
+                    </div>
+
+                    <!-- 감정 -->
+                    <strong th:classappend="${review.sentiment == 'POSITIVE'}
+                             ? 'positive-text'
+                             : 'negative-text'">
+
+                        <span th:text="${review.sentiment == 'POSITIVE'}
+                              ? '긍정'
+                              : '부정'">
+                        </span>
+
+                    </strong>
+
+                </div>
+
+                <!-- 리뷰 내용 -->
+                <p th:text="${review.content}">
+                    리뷰 내용
+                </p>
+
+                <!-- 분석 결과 -->
+                <div class="analysis-row">
+
+                    <span>
+                        AI 예상 평점
+                    </span>
+
+                    <strong>
+                        ⭐
+                        <span th:text="${review.predictedRating}">
+                            4.5
+                        </span>
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================= 선호 장르 ================= -->
+        <section id="genre"
+                 class="content-section">
+
+            <h2>선호 장르</h2>
+
+            <p class="section-desc">
+                추천에 활용되는 선호 장르예요.
+            </p>
+
+            <div class="genre-card">
+
+                <span>SF</span>
+                <span>액션</span>
+                <span>스릴러</span>
+                <span>드라마</span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<!-- ================= 탭 스크립트 ================= -->
+<script>
+
+    function showTab(event, tabId) {
+
+        // 버튼
+        const buttons =
+            document.querySelectorAll(".menu-btn");
+
+        // 섹션
+        const sections =
+            document.querySelectorAll(".content-section");
+
+        // 버튼 active 제거
+        buttons.forEach(button => {
+            button.classList.remove("active");
+        });
+
+        // 섹션 숨기기
+        sections.forEach(section => {
+            section.classList.remove("active-section");
+        });
+
+        // 현재 탭 보이기
+        document.getElementById(tabId)
+            .classList.add("active-section");
+
+        // 버튼 active
+        event.currentTarget.classList.add("active");
+    }
+
+</script>
+
+</body>
+</html>

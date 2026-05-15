@@ -23,8 +23,6 @@ public class Movie {
     private String director;
 
     // 배우
-    @Column(length = 1000)
-    private String actors;
 
     // 개봉일
     private String releaseDate;
@@ -33,10 +31,14 @@ public class Movie {
     @Column(length = 1000)
     private String posterUrl;
 
-    // 줄거리
-    @Column(length = 5000)
-    private String description;
+
 
     // 평균 평점
     private Double rating;
+//    배우
+    @Column(columnDefinition = "TEXT")
+    private String actors;
+//줄거리
+    @Column(columnDefinition = "TEXT")
+    private String description;
 }

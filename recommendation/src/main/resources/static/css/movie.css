@@ -218,6 +218,12 @@ body {
     background: rgba(177,18,38,0.15);
 }
 
+.pagination a.active {
+    background: #e11d2e;
+    border-color: #e11d2e;
+    color: #ffffff;
+}
+
 /* 반응형 */
 
 @media (max-width: 1200px) {

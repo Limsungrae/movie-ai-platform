@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,10 +31,20 @@ public class User {
     private String email;
 
     // 사용자 권한
-    // ex) USER / ADMIN
     private String role;
 
     // 회원가입 날짜
     private LocalDateTime createDate;
+
+    // =========================
+    // 선호 장르
+    // =========================
+    private String favoriteGenre;
+
+    // =========================
+    // 작성 리뷰 목록
+    // =========================
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
 
 }

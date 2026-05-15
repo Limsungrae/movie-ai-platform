@@ -27,14 +27,14 @@ public class Review {
      * 어떤 영화의 리뷰인지
      * 여러 리뷰 : 하나의 영화
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Movie movie;
 
     /**
      * 어떤 사용자가 작성했는지
      * 여러 리뷰 : 한 명의 사용자
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     /**

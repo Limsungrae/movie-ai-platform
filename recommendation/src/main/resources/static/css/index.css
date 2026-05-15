@@ -111,38 +111,147 @@ a{
     padding:0 80px;
 }
 
-.hero-content{
-    max-width:700px;
+.hero-content {
+    position: relative;
+
+    width: 820px;
+    min-height: 380px;
+
+    padding: 48px 56px;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10, 10, 10, 0.62),
+            rgba(10, 10, 10, 0.36)
+        );
+
+    border: 1px solid rgba(255, 255, 255, 0.16);
+
+    backdrop-filter: blur(8px);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        inset 0 0 40px rgba(255, 255, 255, 0.02);
+
+    overflow: hidden;
 }
 
-.hero-content h1{
-    font-size:58px;
-    line-height:1.3;
-    margin-bottom:20px;
+.hero-mini-title {
+    margin-bottom: 24px;
+
+    color: #ff2941;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 8px;
 }
 
-.hero-content p{
-    color:#ccc;
-    font-size:20px;
-    margin-bottom:35px;
+.hero-sparkle {
+    position: absolute;
+
+    top: 48px;
+    right: 56px;
+
+    color: #ff2941;
+
+    font-size: 34px;
+
+    text-shadow:
+        0 0 14px rgba(255, 41, 65, 0.55);
 }
 
-.hero-buttons{
-    display:flex;
-    gap:16px;
+.hero-content h1 {
+    font-size: 42px;
+    line-height: 1.28;
+
+    letter-spacing: -1.5px;
+
+    font-weight: 800;
+
+    margin-bottom: 24px;
+
+    color: #ffffff;
 }
 
-.btn-red{
-    background:linear-gradient(90deg, #7a0f16, #b11226);
-    padding:14px 28px;
-    border-radius:8px;
-    font-weight:bold;
+.hero-content h1 span {
+    color: #d9152b;
 }
 
-.btn-dark{
-    background:#222;
-    padding:14px 28px;
-    border-radius:8px;
+.hero-line {
+    width: 72px;
+    height: 4px;
+
+    background: #e11d2e;
+
+    border-radius: 999px;
+
+    margin-bottom: 28px;
+}
+
+.hero-content p {
+    color: #d1d5db;
+
+    font-size: 17px;
+
+    margin-bottom: 30px;
+
+    line-height: 1.7;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-red {
+    background: linear-gradient(
+        135deg,
+        #e11d2e,
+        #b11226
+    );
+
+    padding: 16px 36px;
+
+    border-radius: 12px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 10px 30px rgba(225, 29, 46, 0.25);
+}
+
+.btn-red:hover {
+    transform: translateY(-2px);
+
+    background: linear-gradient(
+        135deg,
+        #ff2b44,
+        #c5112a
+    );
+}
+
+.btn-dark {
+    background: #222;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    padding: 16px 36px;
+
+    border-radius: 12px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+}
+
+.btn-dark:hover {
+    background: rgba(255,255,255,0.12);
 }
 
 /* movie section */

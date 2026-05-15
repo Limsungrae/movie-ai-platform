@@ -45,6 +45,10 @@ body {
   left: 48px;
   z-index: 2;
 
+  text-decoration: none;
+  color: #e11d2e;
+  cursor: pointer;
+
   font-size: 32px;
   font-weight: 900;
 
