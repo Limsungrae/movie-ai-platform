@@ -3,100 +3,141 @@
 
 <head>
     <meta charset="UTF-8">
-
     <title>리뷰 작성 - CineFeel</title>
 
-    <!-- CSS 연결 -->
     <link rel="stylesheet"
           th:href="@{/css/review-write.css}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
+          rel="stylesheet">
 </head>
 
 <body>
 
-<div class="review-page">
+<!-- 상단바 -->
+<header class="topbar">
 
-    <!-- ================= 리뷰 카드 ================= -->
+    <!-- 로고 -->
+    <a th:href="@{/}" class="logo">
+        CineFeel
+    </a>
+
+    <!-- 메뉴 -->
+    <nav class="nav-menu">
+
+        <a th:href="@{/}">
+            홈
+        </a>
+
+        <a th:href="@{/movie/list}">
+            영화목록
+        </a>
+
+    </nav>
+
+    <!-- 오른쪽 -->
+    <div class="top-right">
+
+        <a th:if="${session.user == null}"
+           th:href="@{/login}">
+            로그인
+        </a>
+
+        <a th:if="${session.user == null}"
+           th:href="@{/signup}">
+            회원가입
+        </a>
+
+        <a th:if="${session.user != null}"
+           th:href="@{/logout}">
+            로그아웃
+        </a>
+
+    </div>
+
+</header>
+
+<!-- 전체 -->
+<div class="review-container">
+
+    <!-- 카드 -->
     <div class="review-card">
 
-        <!-- ================= 영화 요약 정보 ================= -->
-        <div class="movie-summary">
+        <!-- 영화 정보 -->
+        <div class="movie-info">
 
-            <!-- 영화 포스터 -->
             <img th:src="${movie.posterUrl}"
-                 alt="영화 포스터"
-                 class="summary-poster">
+                 alt="영화 포스터">
 
-            <!-- 영화 정보 -->
-            <div>
+            <div class="movie-text">
 
-                <!-- 영화 제목 -->
-                <h1 th:text="${movie.title}">
+                <h2 th:text="${movie.title}">
                     인터스텔라
-                </h1>
+                </h2>
 
-                <!-- 장르 / 연도 / 러닝타임 -->
                 <p>
-
-                    <!-- 장르 -->
                     <span th:text="${movie.genre}">
                         SF
                     </span>
 
                     /
 
-                    <!-- 개봉년도 -->
                     <span th:text="${movie.releaseDate}">
                         2014
                     </span>
 
                     /
 
-                    <!-- 러닝타임 -->
-                    <span>
-                        169분
-                    </span>
-
+                    169분
                 </p>
 
-                <!-- 평점 -->
-                <strong>
+                <div class="movie-rating">
+
                     ⭐
                     <span th:text="${movie.rating}">
                         4.8
                     </span>
-                </strong>
+
+                </div>
 
             </div>
 
         </div>
 
-        <!-- ================= 리뷰 작성 폼 ================= -->
+        <!-- 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 제목 -->
+        <h3 class="review-title">
+            리뷰를 작성해주세요
+        </h3>
+
+        <!-- 설명 -->
+        <p class="review-sub">
+            이 영화는 어떤 느낌이었나요?
+        </p>
+
+        <!-- 리뷰 폼 -->
         <form th:action="@{/movie/review/{id}(id=${movie.id})}"
-              method="post"
-              class="review-form">
+              method="post">
 
-            <!-- 제목 -->
-            <h2>리뷰를 작성해주세요</h2>
+            <div class="review-box">
 
-            <!-- 안내 문구 -->
-            <p class="question">
-                이 영화는 어떤 느낌이었나요?
-            </p>
+                <textarea name="content"
+                          maxlength="500"
+                          required
+                          placeholder="영화를 보고 느낀 감정을 자유롭게 작성해주세요."></textarea>
 
-            <!-- 리뷰 입력 -->
-            <textarea name="content"
-                      maxlength="500"
-                      required
-                      placeholder="영화를 보고 느낀 감정을 자유롭게 작성해주세요."></textarea>
+            </div>
 
             <!-- 안내 -->
-            <p class="tip">
+            <p class="notice">
                 ⓘ 욕설, 비방, 스포일러성 내용은 제한될 수 있어요.
             </p>
 
-            <!-- 제출 버튼 -->
+            <!-- 버튼 -->
             <button type="submit"
-                    class="review-btn">
+                    class="analyze-btn">
 
                 감성 분석하기
 

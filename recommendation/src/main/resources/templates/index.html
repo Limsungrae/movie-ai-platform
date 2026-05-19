@@ -8,7 +8,8 @@
     <link rel="stylesheet" th:href="@{/css/index.css}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
           rel="stylesheet">
 </head>
 
@@ -19,29 +20,53 @@
     <!-- navbar -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <!-- hero -->
+    <!-- ================= HERO ================= -->
     <section class="hero-section">
 
         <div class="hero-overlay">
 
             <div class="hero-content">
 
+                <div class="hero-mini-title">
+                    ✦ AI MOVIE RECOMMENDATION
+                </div>
+
+                <div class="hero-sparkle">
+                    ✦ ✦
+                </div>
+
                 <h1>
                     당신의 리뷰 감성을 분석해<br>
-                    취향에 맞는 영화를 추천해드려요
+                    취향에 맞는 <span>영화를 추천해드려요</span>
                 </h1>
 
+                <div class="hero-line"></div>
+
                 <p>
-                    리뷰 데이터를 기반으로 AI 영화 추천 서비스를 제공합니다.
+                    AI 감성 분석 기반 영화 추천 플랫폼 CineFeel
                 </p>
 
                 <div class="hero-buttons">
 
-                    <a href="#" class="btn-red">
-                        리뷰 분석하기
-                    </a>
+                    <!-- 로그인 상태 -->
+                    <th:block th:if="${session.user != null}">
 
-                    <a href="/movie/list" class="btn-dark">
+                        <a th:href="@{/movie/list}" class="btn-red">
+                            리뷰 분석하기
+                        </a>
+
+                    </th:block>
+
+                    <!-- 비로그인 -->
+                    <th:block th:if="${session.user == null}">
+
+                        <a th:href="@{/login}" class="btn-red">
+                            로그인 후 시작하기
+                        </a>
+
+                    </th:block>
+
+                    <a th:href="@{/movie/list}" class="btn-dark">
                         영화 둘러보기
                     </a>
 
@@ -53,42 +78,78 @@
 
     </section>
 
-    <!-- 인기 영화 -->
+    <!-- ================= 인기 영화 ================= -->
     <section class="movie-section">
 
-        <div class="section-title">
-            🔥 인기 영화 TOP 6
+        <div class="section-header">
+
+            <div class="section-title">
+                🔥 인기 영화 TOP 6
+            </div>
+
+            <a th:href="@{/movie/list}" class="more-link">
+                전체보기 →
+            </a>
+
         </div>
 
         <div class="movie-grid">
 
-            <div class="movie-card">
-                <img src="https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg">
-                <h3>인터스텔라</h3>
-                <p>⭐ 4.8</p>
-            </div>
+            <!-- 영화 반복 -->
+            <div class="movie-card"
+                 th:each="movie : ${movies}">
 
-            <div class="movie-card">
-                <img src="https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg">
-                <h3>인셉션</h3>
-                <p>⭐ 4.7</p>
-            </div>
+                <a th:href="@{/movie/detail/{id}(id=${movie.id})}">
 
-            <div class="movie-card">
-                <img src="https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg">
-                <h3>다크나이트</h3>
-                <p>⭐ 4.9</p>
-            </div>
+                    <div class="movie-poster-wrap">
 
-            <div class="movie-card">
-                <img src="https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg">
-                <h3>어벤져스</h3>
-                <p>⭐ 4.6</p>
+                        <img th:src="${movie.posterUrl}"
+                             alt="영화 포스터">
+
+                        <div class="movie-overlay">
+
+                            <span>
+                                상세보기
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="movie-info">
+
+                        <h3 th:text="${movie.title}">
+                            영화제목
+                        </h3>
+
+                        <div class="movie-meta">
+
+                            <span class="movie-rating">
+                                ⭐
+                                <span th:text="${movie.rating}">
+                                    4.5
+                                </span>
+                            </span>
+
+                            <span class="movie-genre"
+                                  th:text="${movie.genre}">
+                                SF
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
             </div>
 
         </div>
 
     </section>
+
+
+
 
     <!-- footer -->
     <div th:replace="~{fragments/footer :: footer}"></div>

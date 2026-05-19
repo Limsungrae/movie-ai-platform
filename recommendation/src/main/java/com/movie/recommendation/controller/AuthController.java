@@ -17,7 +17,7 @@ public class AuthController {
     }
 
     // 홈 (로그인 체크)
-    @GetMapping("/") public String home() { return "index"; }
+//    @GetMapping("/") public String home() { return "index"; }
 
     // 회원가입 페이지
     @GetMapping("/signup")

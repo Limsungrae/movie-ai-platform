@@ -6,7 +6,7 @@ import com.movie.recommendation.repository.MovieRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,5 +53,22 @@ public class MovieService {
     public Page<Movie> getMovieList(Pageable pageable) {
 
         return movieRepository.findAll(pageable);
+    }
+    public Movie findByTitle(String title) {
+
+        return movieRepository.findByTitle(title)
+                .orElse(null);
+    }
+    public List<Movie> getTopMovies() {
+
+        return movieRepository.findTop6ByOrderByRatingDesc();
+    }
+    public Page<Movie> searchMovies(String keyword,
+                                    Pageable pageable) {
+
+        return movieRepository.findByTitleContaining(
+                keyword,
+                pageable
+        );
     }
 }

@@ -3,37 +3,69 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>영화 상세</title>
 
-    <!-- CSS 연결 -->
-    <link rel="stylesheet" th:href="@{/css/movie-detail.css}">
+    <title th:text="${movie.title} + ' - CineFeel'">
+        영화 상세
+    </title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/movie-detail.css}">
+
+    <!-- 폰트 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap"
+          rel="stylesheet">
 </head>
 
 <body>
 
 <div class="detail-page">
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- ================= TOPBAR ================= -->
     <header class="navbar">
 
-        <a class="logo" th:href="@{/}">CineFeel</a>
+        <!-- 로고 -->
+        <a class="logo"
+           th:href="@{/}">
+            CineFeel
+        </a>
 
+        <!-- 메뉴 -->
         <nav>
-            <a th:href="@{/}">홈</a>
-            <a th:href="@{/movies}">영화</a>
-            <a th:href="@{/analysis}">리뷰분석</a>
-            <a th:href="@{/recommend}">추천</a>
-            <a th:href="@{/mypage}">마이페이지</a>
+
+            <a th:href="@{/}">
+                홈
+            </a>
+
+            <a th:href="@{/movie/list}">
+                영화목록
+            </a>
+
         </nav>
 
+        <!-- 우측 -->
         <div class="nav-icons">
-            <span>🔍</span>
-            <span>👤</span>
+
+            <a th:if="${session.user == null}"
+               th:href="@{/login}">
+                로그인
+            </a>
+
+            <a th:if="${session.user == null}"
+               th:href="@{/signup}">
+                회원가입
+            </a>
+
+            <a th:if="${session.user != null}"
+               th:href="@{/logout}">
+                로그아웃
+            </a>
+
         </div>
 
     </header>
 
-    <!-- ================= MOVIE DETAIL ================= -->
+    <!-- ================= DETAIL ================= -->
     <main class="detail-card">
 
         <!-- ===== POSTER ===== -->
@@ -41,7 +73,7 @@
 
             <div class="main-poster">
 
-                <!-- 포스터 있을 때 -->
+                <!-- 포스터 -->
                 <img th:if="${movie.posterUrl != null}"
                      th:src="${movie.posterUrl}"
                      alt="movie poster">
@@ -49,7 +81,9 @@
                 <!-- 포스터 없을 때 -->
                 <div th:if="${movie.posterUrl == null}"
                      class="poster-placeholder">
+
                     NO IMAGE
+
                 </div>
 
             </div>
@@ -60,34 +94,59 @@
         <section class="info-area">
 
             <!-- 제목 -->
-            <h1 th:text="${movie.title}">영화 제목</h1>
+            <h1 th:text="${movie.title}">
+                영화 제목
+            </h1>
 
             <!-- 평점 -->
             <div class="rating">
-                <span class="star">★</span>
 
-                <!-- null 방어 -->
-                <strong th:text="${movie.rating} ?: 0">0.0</strong>
+                <span class="star">
+                    ★
+                </span>
 
-                <span>평점</span>
+                <strong th:text="${movie.rating} ?: 0">
+                    0.0
+                </strong>
+
+                <span>
+                    평점
+                </span>
+
             </div>
 
             <!-- 장르 -->
             <div class="tag-list">
-                <span th:text="${movie.genre}">Genre</span>
+
+                <span th:text="${movie.genre}">
+                    SF
+                </span>
+
             </div>
 
             <!-- 감독 / 개봉 -->
             <div class="movie-info">
 
                 <p>
-                    <strong>감독</strong>
-                    <span th:text="${movie.director} ?: '정보 없음'"></span>
+
+                    <strong>
+                        감독
+                    </strong>
+
+                    <span th:text="${movie.director} ?: '정보 없음'">
+                    </span>
+
                 </p>
 
                 <p>
-                    <strong>개봉</strong>
-                    <span th:text="${movie.releaseDate} ?: '-'"></span>
+
+                    <strong>
+                        개봉
+                    </strong>
+
+                    <span th:text="${movie.releaseDate} ?: '-'">
+                    </span>
+
                 </p>
 
             </div>
@@ -95,15 +154,19 @@
             <!-- 설명 -->
             <p class="description"
                th:text="${movie.description} ?: '설명이 없습니다.'">
+
+                영화 설명
+
             </p>
 
-            <!-- ================= REVIEW FORM ================= -->
-            <!-- 리뷰 작성 페이지 이동 버튼 -->
+            <!-- 버튼 -->
             <div class="review-btn-area">
 
                 <a th:href="@{/movie/review/{id}(id=${movie.id})}"
                    class="main-btn">
+
                     리뷰 작성하기
+
                 </a>
 
             </div>
@@ -112,38 +175,57 @@
 
     </main>
 
-    <!-- ================= REVIEW LIST ================= -->
+    <!-- ================= REVIEW SECTION ================= -->
     <section class="review-section">
 
-        <h2>리뷰 목록</h2>
+        <div class="review-title-wrap">
 
-        <!-- 리뷰 없을 때 -->
-        <div th:if="${#lists.isEmpty(reviews)}">
-            <p style="color:#777;">아직 리뷰가 없습니다.</p>
+            <h2>
+                리뷰 목록
+            </h2>
+
+            <span th:text="${#lists.size(reviews)} + '개의 리뷰'">
+                0개의 리뷰
+            </span>
+
         </div>
 
-        <!-- 리뷰 있을 때 -->
+        <!-- 리뷰 없을 때 -->
+        <div th:if="${#lists.isEmpty(reviews)}"
+             class="empty-review">
+
+            <p>
+                아직 작성된 리뷰가 없습니다.
+            </p>
+
+        </div>
+
+        <!-- 리뷰 반복 -->
         <div class="review-card"
              th:each="review : ${reviews}">
 
+            <!-- 상단 -->
             <div class="review-header">
 
-                <!-- LAZY 안전 처리 -->
+                <!-- 작성자 -->
                 <strong th:text="${review.user != null ? review.user.username : '익명'}">
                     user
                 </strong>
 
-                <!-- 감정 분석 -->
+                <!-- 감정 -->
                 <span class="sentiment"
-                      th:text="${review.sentiment} ?: 'UNKNOWN'">
-                    sentiment
+                      th:text="${review.sentiment} ?: 'UNKNOWN'"
+                      th:classappend="${review.sentiment == '긍정'} ? 'positive' : 'negative'">
+
+                    긍정
+
                 </span>
 
             </div>
 
-            <!-- 리뷰 내용 -->
+            <!-- 내용 -->
             <p th:text="${review.content}">
-                review content
+                리뷰 내용
             </p>
 
         </div>

@@ -1,154 +1,140 @@
 package com.movie.recommendation.service;
 
 import com.movie.recommendation.dto.AnalysisResultDto;
+import com.movie.recommendation.dto.PythonResponseDto;
 import com.movie.recommendation.dto.RecommendationDto;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import com.movie.recommendation.entity.Movie;
+import com.movie.recommendation.service.MovieService;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * 감성 분석 서비스
- *
- * 현재:
- * 임시(Mock) 데이터 반환
- *
- * 추후:
- * Python AI 서버 연동 예정
- */
 @Service
 public class SentimentService {
 
-    /**
-     * 리뷰 감성 분석
-     */
-    public AnalysisResultDto analyze(String reviewContent) {
+    private final RestTemplate restTemplate;
+    private final MovieService movieService;
+    public SentimentService(RestTemplate restTemplate,
+                            MovieService movieService) {
 
-        // =============================
-        // 감성 분석 결과 DTO 생성
-        // =============================
+        this.restTemplate = restTemplate;
+        this.movieService = movieService;
+    }
+
+    public AnalysisResultDto analyze(String movieTitle,
+                                     String reviewContent) {
+
+        // =========================
+        // Python 서버 요청 데이터
+        // =========================
+
+        Map<String, String> request = new HashMap<>();
+
+        request.put("title", movieTitle);
+        request.put("review", reviewContent);
+
+        // =========================
+        // HTTP 헤더
+        // =========================
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> entity =
+                new HttpEntity<>(request, headers);
+
+        // =========================
+        // Python 서버 호출
+        // =========================
+
+        ResponseEntity<PythonResponseDto> response =
+                restTemplate.exchange(
+                        "http://127.0.0.1:8000/predict",
+                        HttpMethod.POST,
+                        entity,
+                        PythonResponseDto.class
+                );
+
+        PythonResponseDto pythonResult =
+                response.getBody();
+
+        // =========================
+        // Spring DTO 변환
+        // =========================
 
         AnalysisResultDto result =
                 new AnalysisResultDto();
 
-        // -----------------------------
-        // 임시 감성 분석 결과
-        // -----------------------------
+        // 감성 결과
+        String sentiment =
+                pythonResult.getSentiment().get감정();
 
-        result.setSentiment("POSITIVE");
+        if (sentiment.equals("긍정")) {
 
-        result.setPositivePercent(87.0);
+            result.setSentiment("POSITIVE");
 
-        result.setNegativePercent(13.0);
+        } else {
 
-        // AI 분석 코멘트
+            result.setSentiment("NEGATIVE");
+        }
+        double positive =
+                Math.round(
+                        pythonResult.getSentiment().get긍정확률() * 1000
+                ) / 10.0;
+
+        double negative =
+                Math.round(
+                        (100 -
+                                (pythonResult.getSentiment().get긍정확률() * 100)
+                        ) * 10
+                ) / 10.0;
+
+        result.setPositivePercent(positive);
+
+        result.setNegativePercent(negative);
+
         result.setAiComment(
-                "사용자는 몰입감 있는 SF 영화를 선호하는 경향이 있습니다."
+                "AI가 리뷰를 기반으로 영화를 추천했어요."
         );
 
-        // =============================
-        // 추천 영화 리스트 생성
-        // =============================
+        // =========================
+        // 추천 영화 변환
+        // =========================
 
         List<RecommendationDto> recommendations =
                 new ArrayList<>();
 
-        // -----------------------------
-        // 추천 영화 1
-        // -----------------------------
+        for (PythonResponseDto.MovieDto movie :
+                pythonResult.getRecommend().get추천영화목록()) {
 
-        RecommendationDto movie1 =
-                new RecommendationDto();
+            RecommendationDto dto =
+                    new RecommendationDto();
 
-        movie1.setMovieId(1L);
+            dto.setTitle(movie.get영화제목());
 
-        movie1.setTitle("인셉션");
+            dto.setGenre(movie.get장르());
 
-        movie1.setPosterUrl(
-                "https://image.tmdb.org/t/p/w500/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg"
-        );
+            dto.setMatchScore(movie.get매칭률());
 
-        movie1.setGenre("SF");
+            // 임시값
+            Movie foundMovie =
+                    movieService.findByTitle(movie.get영화제목());
 
-        movie1.setRating(4.7);
+            if (foundMovie != null) {
 
-        movie1.setMatchScore(92.0);
+                dto.setMovieId(foundMovie.getId());
 
-        recommendations.add(movie1);
+                dto.setPosterUrl(foundMovie.getPosterUrl());
 
-        // -----------------------------
-        // 추천 영화 2
-        // -----------------------------
+                dto.setRating(foundMovie.getRating());
+            }
+            recommendations.add(dto);
+        }
 
-        RecommendationDto movie2 =
-                new RecommendationDto();
-
-        movie2.setMovieId(2L);
-
-        movie2.setTitle("그래비티");
-
-        movie2.setPosterUrl(
-                "https://image.tmdb.org/t/p/w500/kZ2nZw8D681aphje8NJi8EfbL1U.jpg"
-        );
-
-        movie2.setGenre("SF");
-
-        movie2.setRating(4.6);
-
-        movie2.setMatchScore(89.0);
-
-        recommendations.add(movie2);
-
-        // -----------------------------
-        // 추천 영화 3
-        // -----------------------------
-
-        RecommendationDto movie3 =
-                new RecommendationDto();
-
-        movie3.setMovieId(3L);
-
-        movie3.setTitle("메이즈 러너");
-
-        movie3.setPosterUrl(
-                "https://image.tmdb.org/t/p/w500/ode14q7WtDugFDp78fo9lCsmay9.jpg"
-        );
-
-        movie3.setGenre("SF");
-
-        movie3.setRating(4.5);
-
-        movie3.setMatchScore(86.0);
-
-        recommendations.add(movie3);
-
-        // -----------------------------
-        // 추천 영화 4
-        // -----------------------------
-
-        RecommendationDto movie4 =
-                new RecommendationDto();
-
-        movie4.setMovieId(4L);
-
-        movie4.setTitle("블레이드 러너 2049");
-
-        movie4.setPosterUrl(
-                "https://image.tmdb.org/t/p/w500/gajva2L0rPYkEWjzgFlBXCAVBE5.jpg"
-        );
-
-        movie4.setGenre("SF");
-
-        movie4.setRating(4.4);
-
-        movie4.setMatchScore(84.0);
-
-        recommendations.add(movie4);
-
-        // 추천 영화 리스트 저장
         result.setRecommendations(recommendations);
 
-        // 최종 결과 반환
         return result;
     }
 }

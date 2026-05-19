@@ -6,10 +6,11 @@
     <title>영화 목록 - CineFeel</title>
 
     <link rel="stylesheet" th:href="@{/css/index.css}">
-    <link rel="stylesheet" th:href="@{/css/movie.css?v=21}">
+    <link rel="stylesheet" th:href="@{/css/movie.css?v=30}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&display=swap"
           rel="stylesheet">
 </head>
 
@@ -22,39 +23,63 @@
 
     <section class="movie-page">
 
+        <!-- 헤더 -->
         <div class="movie-header">
 
-            <h1>🎬 영화 목록</h1>
+            <div>
+                <h1>🎬 영화 목록</h1>
+            </div>
 
-            <!-- 검색창 -->
-            <input type="text"
-                   placeholder="영화 제목 검색">
+            <form th:action="@{/movie/list}"
+                  method="get"
+                  class="search-form">
+
+                <input type="text"
+                       name="keyword"
+                       th:value="${keyword}"
+                       placeholder="영화 제목 검색">
+
+                <button type="submit">
+                    검색
+                </button>
+
+            </form>
 
         </div>
 
         <!-- 영화 목록 -->
         <div class="movie-grid">
 
-            <!-- 영화 반복 -->
             <a class="movie-card"
                th:each="movie : ${paging.content}"
                th:href="@{/movie/detail/{id}(id=${movie.id})}">
 
                 <!-- 포스터 -->
-                <img th:src="${movie.posterUrl}">
+                <div class="poster-wrap">
 
+                    <img th:src="${movie.posterUrl}"
+                         alt="영화 포스터">
+
+                    <div class="movie-overlay">
+                        상세보기
+                    </div>
+
+                </div>
+
+                <!-- 정보 -->
                 <div class="movie-info">
 
-                    <!-- 제목 -->
-                    <h3 th:text="${movie.title}"></h3>
+                    <h3 th:text="${movie.title}">
+                        영화 제목
+                    </h3>
 
-                    <!-- 장르 -->
-                    <p th:text="${movie.genre}"></p>
+                    <p th:text="${movie.genre}">
+                        장르
+                    </p>
 
-                    <!-- 평점 -->
                     <span>
-                ⭐ <span th:text="${movie.rating}"></span>
-            </span>
+                        ⭐ <span th:text="${movie.rating}">4.5</span>
+                    </span>
 
                 </div>
 
@@ -65,22 +90,28 @@
         <!-- 페이지네이션 -->
         <div class="pagination">
 
-            <!-- 이전 버튼 -->
-            <a th:if="${paging.hasPrevious()}"
-               th:href="@{/movie/list(page=${paging.number - 1})}">
+            <!-- 이전 -->
+            <a th:if="${startPage > 0}"
+               th:href="@{/movie/list(page=${startPage - 1})}">
                 이전
             </a>
 
-            <!-- 현재 페이지 -->
-            <span th:text="${paging.number + 1}"></span>
+            <!-- 페이지 번호 -->
+            <a th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
+               th:href="@{/movie/list(page=${pageNum})}"
+               th:text="${pageNum + 1}"
+               th:classappend="${pageNum == paging.number} ? 'active' : ''">
+            </a>
 
-            <!-- 다음 버튼 -->
-            <a th:if="${paging.hasNext()}"
-               th:href="@{/movie/list(page=${paging.number + 1})}">
+            <!-- 다음 -->
+            <a th:if="${endPage < paging.totalPages - 1}"
+               th:href="@{/movie/list(page=${endPage + 1})}">
                 다음
             </a>
 
         </div>
+
+
 
     </section>
 

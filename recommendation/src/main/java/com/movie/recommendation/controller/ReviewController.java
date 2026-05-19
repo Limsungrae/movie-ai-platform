@@ -84,7 +84,10 @@ public class ReviewController {
         // ====================================
 
         AnalysisResultDto result =
-                sentimentService.analyze(content);
+                sentimentService.analyze(
+                        movie.getTitle(),
+                        content
+                );
 
         // ====================================
         // 리뷰 객체 생성

@@ -25,24 +25,59 @@ public class MovieController {
         this.movieService = movieService;
         this.reviewService = reviewService;
     }
-
     // 영화 목록 페이지
     @GetMapping("/movie/list")
     public String movieList(Model model,
 
-                            // 한 페이지에 6개씩 출력
-                            @PageableDefault(size = 6) Pageable pageable) {
+                            @RequestParam(
+                                    value = "keyword",
+                                    required = false
+                            ) String keyword,
 
-        // 페이지 형태로 영화 조회
-        Page<Movie> moviePage =
-                movieService.getMovieList(pageable);
+                            @PageableDefault(size = 10)
+                            Pageable pageable) {
 
-        // html 로 데이터 전달
+        Page<Movie> moviePage;
+
+        // 검색어 있으면 검색
+        if (keyword != null &&
+                !keyword.trim().isEmpty()) {
+
+            moviePage =
+                    movieService.searchMovies(
+                            keyword,
+                            pageable
+                    );
+
+        } else {
+
+            moviePage =
+                    movieService.getMovieList(
+                            pageable
+                    );
+        }
+
+        int currentPage = moviePage.getNumber();
+
+        int totalPages = moviePage.getTotalPages();
+
+        int startPage =
+                Math.max(currentPage - 2, 0);
+
+        int endPage =
+                Math.min(currentPage + 2,
+                        totalPages - 1);
+
         model.addAttribute("paging", moviePage);
+
+        model.addAttribute("startPage", startPage);
+
+        model.addAttribute("endPage", endPage);
+
+        model.addAttribute("keyword", keyword);
 
         return "movie/list";
     }
-
     // 영화 상세 페이지
     @GetMapping("/movie/detail/{id}")
     public String movieDetail(@PathVariable Long id,
@@ -60,5 +95,15 @@ public class MovieController {
         model.addAttribute("reviews", reviews);
 
         return "movie/detail";
+    }
+    @GetMapping("/")
+    public String index(Model model) {
+
+        List<Movie> movies =
+                movieService.getTopMovies();
+
+        model.addAttribute("movies", movies);
+
+        return "index";
     }
 }

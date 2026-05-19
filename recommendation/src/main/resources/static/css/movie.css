@@ -53,7 +53,7 @@ body {
 /* 헤더 */
 
 .movie-header {
-    max-width: 1180px;
+    max-width: 1160px;
 
     margin: 0 auto 40px;
 
@@ -96,11 +96,11 @@ body {
 .movie-grid {
     display: grid;
 
-    grid-template-columns: repeat(6, 180px);
+    grid-template-columns: repeat(5, 210px);
 
     gap: 28px;
 
-    max-width: 1180px;
+    max-width: 1160px;
 
     margin: 0 auto;
 }
@@ -108,7 +108,7 @@ body {
 /* 카드 */
 
 .movie-card {
-    width: 180px;
+    width: 210px;
 
     background: rgba(15,15,15,0.95);
 
@@ -135,8 +135,8 @@ body {
 /* 포스터 */
 
 .movie-card img {
-    width: 180px;
-    height: 270px;
+    width: 210px;
+    height: 315px;
 
     object-fit: cover;
     object-position: center;
@@ -229,7 +229,7 @@ body {
 @media (max-width: 1200px) {
 
     .movie-grid {
-        grid-template-columns: repeat(4, 180px);
+        grid-template-columns: repeat(3, 210px);
     }
 }
 
@@ -262,4 +262,76 @@ body {
     .movie-header input {
         width: 100%;
     }
+}
+/* 카드 링크 제거 (05.19 추가)*/
+
+.movie-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 포스터 영역 */
+
+.poster-wrap {
+    position: relative;
+    overflow: hidden;
+}
+
+/* 오버레이 */
+
+.movie-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0,0,0,0.55);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+
+    transition: 0.25s;
+}
+
+/* hover 시 */
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+/* 검색 폼 */
+
+.search-form {
+    display: flex;
+    gap: 10px;
+}
+
+/* 검색 버튼 */
+
+.search-form button {
+    height: 46px;
+
+    padding: 0 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #e11d2e;
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.search-form button:hover {
+    background: #ff3347;
 }
