@@ -33,8 +33,7 @@ public class AnalysisResultDto {
     /**
      * AI 분석 코멘트
      */
-    private String aiComment;
-
+    private List<String> keywords;
     /**
      * 추천 영화 목록
      */

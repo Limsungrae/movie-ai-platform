@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -14,7 +16,7 @@
 
 <body>
 
-<!-- 상단바 -->
+<!-- ================= TOPBAR ================= -->
 <header class="topbar">
 
     <!-- 로고 -->
@@ -35,84 +37,78 @@
 
     </nav>
 
-    <!-- 오른쪽 -->
+    <!-- ================= AUTH ================= -->
     <div class="top-right">
 
-        <a th:if="${session.user == null}"
-           th:href="@{/login}">
-            로그인
-        </a>
+        <!-- 비로그인 -->
+        <div sec:authorize="isAnonymous()">
 
-        <a th:if="${session.user == null}"
-           th:href="@{/signup}">
-            회원가입
-        </a>
+            <a th:href="@{/login}">
+                로그인
+            </a>
 
-        <a th:if="${session.user != null}"
-           th:href="@{/logout}">
-            로그아웃
-        </a>
+            <a th:href="@{/signup}">
+                회원가입
+            </a>
+
+        </div>
+
+        <!-- 로그인 -->
+        <div sec:authorize="isAuthenticated()">
+
+            <span>
+                👤
+                <span th:text="${#authentication.name}">
+                    USER
+                </span>
+            </span>
+
+            <a th:href="@{/logout}">
+                로그아웃
+            </a>
+
+        </div>
 
     </div>
 
 </header>
 
-<!-- 전체 -->
+<!-- ================= CONTENT ================= -->
 <div class="review-container">
 
-    <!-- 카드 -->
     <div class="review-card">
 
         <!-- 영화 정보 -->
         <div class="movie-info">
 
-            <img th:src="${movie.posterUrl}"
-                 alt="영화 포스터">
+            <img th:src="${movie.posterUrl}" alt="영화 포스터">
 
             <div class="movie-text">
 
                 <h2 th:text="${movie.title}">
-                    인터스텔라
+                    영화 제목
                 </h2>
 
                 <p>
-                    <span th:text="${movie.genre}">
-                        SF
-                    </span>
-
+                    <span th:text="${movie.genre}">SF</span>
                     /
-
-                    <span th:text="${movie.releaseDate}">
-                        2014
-                    </span>
-
-                    /
-
-                    169분
+                    <span th:text="${movie.releaseDate}">2024</span>
                 </p>
 
                 <div class="movie-rating">
-
-                    ⭐
-                    <span th:text="${movie.rating}">
-                        4.8
-                    </span>
-
+                    ⭐ <span th:text="${movie.rating}">4.8</span>
                 </div>
 
             </div>
 
         </div>
 
-        <!-- 구분선 -->
         <div class="divider"></div>
 
-        <!-- 제목 -->
         <h3 class="review-title">
             리뷰를 작성해주세요
         </h3>
 
-        <!-- 설명 -->
         <p class="review-sub">
             이 영화는 어떤 느낌이었나요?
         </p>
@@ -130,12 +126,10 @@
 
             </div>
 
-            <!-- 안내 -->
             <p class="notice">
-                ⓘ 욕설, 비방, 스포일러성 내용은 제한될 수 있어요.
+                ⓘ 욕설, 비방, 스포일러는 제한될 수 있어요.
             </p>
 
-            <!-- 버튼 -->
             <button type="submit"
                     class="analyze-btn">
 

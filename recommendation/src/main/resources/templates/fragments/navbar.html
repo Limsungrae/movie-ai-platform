@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <body>
 
@@ -28,16 +29,20 @@
                 영화목록
             </a>
 
-            <!-- 로그인 시만 노출 -->
-            <a th:if="${session.user != null}"
+            <!-- 로그인 상태 -->
+            <a sec:authorize="isAuthenticated()"
                th:href="@{/movie/list}">
+
                 리뷰작성
+
             </a>
 
-            <!-- 로그인 시만 노출 -->
-            <a th:if="${session.user != null}"
+            <!-- 로그인 상태 -->
+            <a sec:authorize="isAuthenticated()"
                th:href="@{/mypage}">
+
                 마이페이지
+
             </a>
 
         </nav>
@@ -59,9 +64,9 @@
 
         </form>
 
-        <!-- 로그인 안한 상태 -->
+        <!-- ================= 비로그인 ================= -->
         <div class="auth-menu"
-             th:if="${session.user == null}">
+             sec:authorize="isAnonymous()">
 
             <a th:href="@{/login}">
                 로그인
@@ -73,14 +78,14 @@
 
         </div>
 
-        <!-- 로그인 한 상태 -->
+        <!-- ================= 로그인 상태 ================= -->
         <div class="auth-menu"
-             th:if="${session.user != null}">
+             sec:authorize="isAuthenticated()">
 
-            <span class="username"
-                  th:text="${session.user.username} + '님'">
+            <span class="username">
 
-                USER
+                <span sec:authentication="name"></span>
+                님
 
             </span>
 

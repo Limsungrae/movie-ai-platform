@@ -10,4 +10,6 @@ public interface UserRepository
 
     // 이메일로 사용자 조회
     Optional<User> findByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

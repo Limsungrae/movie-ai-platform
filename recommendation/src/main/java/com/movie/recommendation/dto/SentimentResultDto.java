@@ -1,24 +1,23 @@
 package com.movie.recommendation.dto;
 
+import java.util.List;
+
 /**
  * 감성분석 결과 DTO
- *
- * Python AI 서버 또는 감성분석 서비스에서
- * 결과를 받아올 때 사용하는 객체
  */
 public class SentimentResultDto {
 
     // 감정 결과
-    // 예: POSITIVE / NEGATIVE
     private String sentiment;
 
-    // 감정 신뢰도
-    // 예: 0.95
+    // 긍정 확률
     private double confidence;
 
-    // 예측 평점
-    // 예: 4.5
+    // AI 예측 평점
     private double score;
+
+    // 핵심 키워드
+    private List<String> keywords;
 
     /**
      * 기본 생성자
@@ -31,11 +30,13 @@ public class SentimentResultDto {
      */
     public SentimentResultDto(String sentiment,
                               double confidence,
-                              double score) {
+                              double score,
+                              List<String> keywords) {
 
         this.sentiment = sentiment;
         this.confidence = confidence;
         this.score = score;
+        this.keywords = keywords;
     }
 
     // ================= Getter / Setter =================
@@ -62,5 +63,13 @@ public class SentimentResultDto {
 
     public void setScore(double score) {
         this.score = score;
+    }
+
+    public List<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 }

@@ -19,6 +19,8 @@ body {
         #050505;
 }
 
+/* ================= NAVBAR ================= */
+
 .navbar {
     height: 64px;
     padding: 0 22px;
@@ -29,8 +31,114 @@ body {
     justify-content: space-between;
 
     background: rgba(10, 10, 10, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
+
+    backdrop-filter: blur(10px);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.logo {
+    color: #b11226;
+    font-size: 24px;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.logo span {
+    color: #ffffff;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-menu a {
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+
+    transition: 0.2s;
+}
+
+.nav-menu a:hover {
+    color: #ffffff;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 220px;
+    height: 40px;
+
+    padding: 0 14px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.05);
+
+    color: #ffffff;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+.auth-menu {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.auth-menu a {
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.auth-menu a:hover {
+    color: #ffffff;
+}
+
+.username {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+@media (max-width: 900px) {
+
+    .navbar {
+        padding: 0 16px;
+    }
+
+    .nav-menu {
+        display: none;
+    }
+
+    .search-input {
+        width: 140px;
+    }
 }
 
 .logo {

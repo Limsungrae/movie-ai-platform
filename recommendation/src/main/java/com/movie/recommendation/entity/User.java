@@ -3,6 +3,7 @@ package com.movie.recommendation.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-    // 사용자 PK
+    // PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,25 +27,24 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // 사용자 이메일
-    @Column(unique = true)
+    // 이메일
+    @Column(unique = true, nullable = false)
     private String email;
 
-    // 사용자 권한
-    private String role;
+    // 권한
+    @Column(nullable = false)
+    private String role = "USER";
 
-    // 회원가입 날짜
+    // 가입일
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createDate;
 
-    // =========================
     // 선호 장르
-    // =========================
-    private String favoriteGenre;
+    @ElementCollection
+    private List<String> genres;
 
-    // =========================
-    // 작성 리뷰 목록
-    // =========================
-    @OneToMany(mappedBy = "user")
+    // 리뷰
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Review> reviews;
-
 }

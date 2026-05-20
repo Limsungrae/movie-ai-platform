@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -21,54 +23,14 @@
 
 <div class="detail-page">
 
-    <!-- ================= TOPBAR ================= -->
-    <header class="navbar">
+    <!-- navbar -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-        <!-- 로고 -->
-        <a class="logo"
-           th:href="@{/}">
-            CineFeel
-        </a>
 
-        <!-- 메뉴 -->
-        <nav>
-
-            <a th:href="@{/}">
-                홈
-            </a>
-
-            <a th:href="@{/movie/list}">
-                영화목록
-            </a>
-
-        </nav>
-
-        <!-- 우측 -->
-        <div class="nav-icons">
-
-            <a th:if="${session.user == null}"
-               th:href="@{/login}">
-                로그인
-            </a>
-
-            <a th:if="${session.user == null}"
-               th:href="@{/signup}">
-                회원가입
-            </a>
-
-            <a th:if="${session.user != null}"
-               th:href="@{/logout}">
-                로그아웃
-            </a>
-
-        </div>
-
-    </header>
-
-    <!-- ================= DETAIL ================= -->
+    <!-- ================= DETAIL CARD ================= -->
     <main class="detail-card">
 
-        <!-- ===== POSTER ===== -->
+        <!-- ===== LEFT : POSTER ===== -->
         <section class="poster-area">
 
             <div class="main-poster">
@@ -90,7 +52,7 @@
 
         </section>
 
-        <!-- ===== INFO ===== -->
+        <!-- ===== RIGHT : INFO ===== -->
         <section class="info-area">
 
             <!-- 제목 -->
@@ -159,11 +121,16 @@
 
             </p>
 
-            <!-- 버튼 -->
+            <!-- 리뷰 버튼 -->
             <div class="review-btn-area">
 
                 <a th:href="@{/movie/review/{id}(id=${movie.id})}"
-                   class="main-btn">
+                   class="main-btn"
+                   style="
+                   display:flex;
+                   align-items:center;
+                   justify-content:center;
+                   text-decoration:none;">
 
                     리뷰 작성하기
 
@@ -178,14 +145,23 @@
     <!-- ================= REVIEW SECTION ================= -->
     <section class="review-section">
 
-        <div class="review-title-wrap">
+        <!-- 타이틀 -->
+        <div class="review-title-wrap"
+             style="
+             display:flex;
+             justify-content:space-between;
+             align-items:center;
+             margin-bottom:20px;">
 
             <h2>
                 리뷰 목록
             </h2>
 
-            <span th:text="${#lists.size(reviews)} + '개의 리뷰'">
+            <span style="color:#9ca3af; font-size:14px;"
+                  th:text="${#lists.size(reviews)} + '개의 리뷰'">
+
                 0개의 리뷰
+
             </span>
 
         </div>
@@ -194,7 +170,7 @@
         <div th:if="${#lists.isEmpty(reviews)}"
              class="empty-review">
 
-            <p>
+            <p style="color:#9ca3af;">
                 아직 작성된 리뷰가 없습니다.
             </p>
 
@@ -214,8 +190,14 @@
 
                 <!-- 감정 -->
                 <span class="sentiment"
-                      th:text="${review.sentiment} ?: 'UNKNOWN'"
-                      th:classappend="${review.sentiment == '긍정'} ? 'positive' : 'negative'">
+
+                      th:text="${review.sentiment == 'POSITIVE'}
+                               ? '긍정'
+                               : '부정'"
+
+                      th:style="${review.sentiment == 'POSITIVE'}
+                      ? 'background:rgba(34,197,94,0.12); color:#22c55e;'
+                      : 'background:rgba(239,68,68,0.12); color:#ef4444;'">
 
                     긍정
 

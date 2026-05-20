@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
+
     <title>마이페이지 - CineFeel</title>
 
     <link rel="stylesheet"
@@ -16,16 +18,20 @@
 
 <div class="mypage-wrap">
 
-    <!-- ================= 사이드바 ================= -->
+    <!-- ================= SIDEBAR ================= -->
     <aside class="mypage-sidebar">
 
-        <a th:href="@{/}" class="sidebar-logo">
+        <a th:href="@{/}"
+           class="sidebar-logo">
+
             CineFeel
+
         </a>
 
         <ul class="menu-list">
 
             <li>
+
                 <button class="menu-btn active"
                         onclick="showTab(event, 'profile')">
 
@@ -33,9 +39,11 @@
                     <span>내 정보</span>
 
                 </button>
+
             </li>
 
             <li>
+
                 <button class="menu-btn"
                         onclick="showTab(event, 'writtenReviews')">
 
@@ -43,9 +51,11 @@
                     <span>작성한 리뷰</span>
 
                 </button>
+
             </li>
 
             <li>
+
                 <button class="menu-btn"
                         onclick="showTab(event, 'genre')">
 
@@ -53,9 +63,11 @@
                     <span>선호 장르</span>
 
                 </button>
+
             </li>
 
-            <li>
+            <li style="margin-top:18px;">
+
                 <a th:href="@{/logout}"
                    style="text-decoration:none;">
 
@@ -68,35 +80,38 @@
                     </button>
 
                 </a>
+
             </li>
 
         </ul>
 
     </aside>
 
-    <!-- ================= 메인 ================= -->
+    <!-- ================= CONTENT ================= -->
     <main class="mypage-content">
 
-        <!-- ================= 내 정보 ================= -->
+        <!-- ================= PROFILE ================= -->
         <section id="profile"
                  class="content-section active-section">
 
-            <h2>내 정보</h2>
+            <h2>
+                내 정보
+            </h2>
 
             <div class="profile-card">
 
                 <div class="profile-image">
+
                     👤
+
                 </div>
 
                 <div class="profile-info">
 
-                    <!-- 유저 이름 -->
                     <h3 th:text="${user.username}">
                         username
                     </h3>
 
-                    <!-- 이메일 -->
                     <p th:text="${user.email}">
                         email
                     </p>
@@ -104,13 +119,17 @@
                     <div class="profile-tags">
 
                         <span>
+
                             긍정 리뷰
-                            <span th:text="${positiveCount}"></span>개
+                            <strong th:text="${positiveCount}"></strong>개
+
                         </span>
 
                         <span>
+
                             부정 리뷰
-                            <span th:text="${negativeCount}"></span>개
+                            <strong th:text="${negativeCount}"></strong>개
+
                         </span>
 
                     </div>
@@ -121,22 +140,26 @@
 
         </section>
 
-        <!-- ================= 작성 리뷰 ================= -->
+        <!-- ================= REVIEWS ================= -->
         <section id="writtenReviews"
                  class="content-section">
 
-            <h2>작성한 리뷰</h2>
+            <h2>
+                작성한 리뷰
+            </h2>
 
             <p class="section-desc">
                 내가 작성한 리뷰와 감성 분석 결과를 확인할 수 있어요.
             </p>
 
-            <!-- 리뷰 통계 -->
+            <!-- 통계 -->
             <div class="review-summary-grid">
 
                 <div class="summary-card positive-card">
 
-                    <span>긍정 리뷰</span>
+                    <span>
+                        긍정 리뷰
+                    </span>
 
                     <strong th:text="${positiveCount} + '개'">
                         0개
@@ -146,13 +169,25 @@
 
                 <div class="summary-card negative-card">
 
-                    <span>부정 리뷰</span>
+                    <span>
+                        부정 리뷰
+                    </span>
 
                     <strong th:text="${negativeCount} + '개'">
                         0개
                     </strong>
 
                 </div>
+
+            </div>
+
+            <!-- 리뷰 없을 때 -->
+            <div th:if="${#lists.isEmpty(reviews)}"
+                 class="my-review-card">
+
+                <p>
+                    아직 작성한 리뷰가 없습니다.
+                </p>
 
             </div>
 
@@ -165,18 +200,18 @@
 
                     <div>
 
-                        <!-- 영화 제목 -->
                         <div class="review-movie-title"
                              th:text="${review.movie.title}">
 
                             영화 제목
+
                         </div>
 
-                        <!-- 날짜 -->
                         <span class="review-date"
                               th:text="${#temporals.format(review.createDate, 'yyyy.MM.dd')}">
 
                             2026.05.15
+
                         </span>
 
                     </div>
@@ -189,18 +224,19 @@
                         <span th:text="${review.sentiment == 'POSITIVE'}
                               ? '긍정'
                               : '부정'">
+
                         </span>
 
                     </strong>
 
                 </div>
 
-                <!-- 리뷰 내용 -->
+                <!-- 내용 -->
                 <p th:text="${review.content}">
                     리뷰 내용
                 </p>
 
-                <!-- 분석 결과 -->
+                <!-- 분석 -->
                 <div class="analysis-row">
 
                     <span>
@@ -208,10 +244,12 @@
                     </span>
 
                     <strong>
+
                         ⭐
-                        <span th:text="${review.predictedRating}">
-                            4.5
-                        </span>
+                        <span th:text="${#numbers.formatDecimal(review.predictedRating, 1, 1)}">
+        4.5
+    </span>
+
                     </strong>
 
                 </div>
@@ -220,11 +258,13 @@
 
         </section>
 
-        <!-- ================= 선호 장르 ================= -->
+        <!-- ================= GENRE ================= -->
         <section id="genre"
                  class="content-section">
 
-            <h2>선호 장르</h2>
+            <h2>
+                선호 장르
+            </h2>
 
             <p class="section-desc">
                 추천에 활용되는 선호 장르예요.
@@ -232,10 +272,12 @@
 
             <div class="genre-card">
 
-                <span>SF</span>
-                <span>액션</span>
-                <span>스릴러</span>
-                <span>드라마</span>
+                <span th:each="genre : ${user.genres}"
+                      th:text="${genre}">
+
+                    SF
+
+                </span>
 
             </div>
 
@@ -245,35 +287,30 @@
 
 </div>
 
-<!-- ================= 탭 스크립트 ================= -->
+<!-- ================= SCRIPT ================= -->
 <script>
 
     function showTab(event, tabId) {
 
-        // 버튼
         const buttons =
             document.querySelectorAll(".menu-btn");
 
-        // 섹션
         const sections =
             document.querySelectorAll(".content-section");
 
-        // 버튼 active 제거
         buttons.forEach(button => {
             button.classList.remove("active");
         });
 
-        // 섹션 숨기기
         sections.forEach(section => {
             section.classList.remove("active-section");
         });
 
-        // 현재 탭 보이기
         document.getElementById(tabId)
             .classList.add("active-section");
 
-        // 버튼 active
-        event.currentTarget.classList.add("active");
+        event.currentTarget
+            .classList.add("active");
     }
 
 </script>

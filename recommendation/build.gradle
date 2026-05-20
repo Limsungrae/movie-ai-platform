@@ -18,7 +18,8 @@ repositories {
 }
 
 dependencies {
-
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -26,7 +27,7 @@ dependencies {
 
 //    26.05.12 CSV 라이브러리 추가
     implementation 'com.opencsv:opencsv:5.9'
-
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     // MySQL
     runtimeOnly 'com.mysql:mysql-connector-j'
 
