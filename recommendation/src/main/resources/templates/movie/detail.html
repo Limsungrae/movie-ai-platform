@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -23,14 +21,74 @@
 
 <div class="detail-page">
 
-    <!-- navbar -->
-    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <!-- ================= TOPBAR ================= -->
+    <header class="navbar">
 
+        <!-- 로고 -->
+        <a class="logo"
+           th:href="@{/}">
+            CineFeel
+        </a>
 
-    <!-- ================= DETAIL CARD ================= -->
+        <!-- 메뉴 -->
+        <nav>
+
+            <a th:href="@{/}">
+                홈
+            </a>
+
+            <a th:href="@{/movie/list}">
+                영화목록
+            </a>
+
+            <!-- 로그인 상태 -->
+            <a sec:authorize="isAuthenticated()"
+               th:href="@{/mypage}">
+                마이페이지
+            </a>
+
+        </nav>
+
+        <!-- 우측 -->
+        <div class="nav-icons">
+
+            <!-- 비로그인 -->
+            <th:block sec:authorize="isAnonymous()">
+
+                <a th:href="@{/login}">
+                    로그인
+                </a>
+
+                <a th:href="@{/signup}">
+                    회원가입
+                </a>
+
+            </th:block>
+
+            <!-- 로그인 -->
+            <th:block sec:authorize="isAuthenticated()">
+
+                <span class="user-badge">
+
+                    👤
+                    <span sec:authentication="name"></span>
+
+                </span>
+
+                <a th:href="@{/logout}">
+                    로그아웃
+                </a>
+
+            </th:block>
+
+        </div>
+
+    </header>
+
+    <!-- ================= DETAIL ================= -->
     <main class="detail-card">
 
-        <!-- ===== LEFT : POSTER ===== -->
+        <!-- ===== POSTER ===== -->
         <section class="poster-area">
 
             <div class="main-poster">
@@ -52,7 +110,7 @@
 
         </section>
 
-        <!-- ===== RIGHT : INFO ===== -->
+        <!-- ===== INFO ===== -->
         <section class="info-area">
 
             <!-- 제목 -->
@@ -67,7 +125,7 @@
                     ★
                 </span>
 
-                <strong th:text="${movie.rating} ?: 0">
+                <strong th:text="${#numbers.formatDecimal(movie.rating,1,1)} ?: 0">
                     0.0
                 </strong>
 
@@ -121,18 +179,24 @@
 
             </p>
 
-            <!-- 리뷰 버튼 -->
+            <!-- 버튼 -->
             <div class="review-btn-area">
 
-                <a th:href="@{/movie/review/{id}(id=${movie.id})}"
-                   class="main-btn"
-                   style="
-                   display:flex;
-                   align-items:center;
-                   justify-content:center;
-                   text-decoration:none;">
+                <!-- 로그인 상태 -->
+                <a sec:authorize="isAuthenticated()"
+                   th:href="@{/movie/review/{id}(id=${movie.id})}"
+                   class="write-review-btn">
 
                     리뷰 작성하기
+
+                </a>
+
+                <!-- 비로그인 -->
+                <a sec:authorize="isAnonymous()"
+                   th:href="@{/login}"
+                   class="write-review-btn">
+
+                    로그인 후 리뷰 작성
 
                 </a>
 
@@ -145,23 +209,14 @@
     <!-- ================= REVIEW SECTION ================= -->
     <section class="review-section">
 
-        <!-- 타이틀 -->
-        <div class="review-title-wrap"
-             style="
-             display:flex;
-             justify-content:space-between;
-             align-items:center;
-             margin-bottom:20px;">
+        <div class="review-title-wrap">
 
             <h2>
                 리뷰 목록
             </h2>
 
-            <span style="color:#9ca3af; font-size:14px;"
-                  th:text="${#lists.size(reviews)} + '개의 리뷰'">
-
+            <span th:text="${#lists.size(reviews)} + '개의 리뷰'">
                 0개의 리뷰
-
             </span>
 
         </div>
@@ -170,7 +225,7 @@
         <div th:if="${#lists.isEmpty(reviews)}"
              class="empty-review">
 
-            <p style="color:#9ca3af;">
+            <p>
                 아직 작성된 리뷰가 없습니다.
             </p>
 
@@ -190,14 +245,8 @@
 
                 <!-- 감정 -->
                 <span class="sentiment"
-
-                      th:text="${review.sentiment == 'POSITIVE'}
-                               ? '긍정'
-                               : '부정'"
-
-                      th:style="${review.sentiment == 'POSITIVE'}
-                      ? 'background:rgba(34,197,94,0.12); color:#22c55e;'
-                      : 'background:rgba(239,68,68,0.12); color:#ef4444;'">
+                      th:text="${review.sentiment == 'POSITIVE'} ? '긍정' : '부정'"
+                      th:classappend="${review.sentiment == 'POSITIVE'} ? 'positive' : 'negative'">
 
                     긍정
 
@@ -209,6 +258,17 @@
             <p th:text="${review.content}">
                 리뷰 내용
             </p>
+
+            <!-- AI 평점 -->
+            <div class="review-rating">
+
+                ⭐ AI 예상 평점
+
+                <strong th:text="${#numbers.formatDecimal(review.predictedRating,1,1)}">
+                    4.5
+                </strong>
+
+            </div>
 
         </div>
 

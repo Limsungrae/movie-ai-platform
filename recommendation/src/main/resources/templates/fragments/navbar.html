@@ -29,20 +29,16 @@
                 영화목록
             </a>
 
-            <!-- 로그인 상태 -->
+            <!-- 로그인 시만 노출 -->
             <a sec:authorize="isAuthenticated()"
                th:href="@{/movie/list}">
-
                 리뷰작성
-
             </a>
 
-            <!-- 로그인 상태 -->
+            <!-- 로그인 시만 노출 -->
             <a sec:authorize="isAuthenticated()"
                th:href="@{/mypage}">
-
                 마이페이지
-
             </a>
 
         </nav>
@@ -64,7 +60,7 @@
 
         </form>
 
-        <!-- ================= 비로그인 ================= -->
+        <!-- 로그인 안한 상태 -->
         <div class="auth-menu"
              sec:authorize="isAnonymous()">
 
@@ -78,18 +74,20 @@
 
         </div>
 
-        <!-- ================= 로그인 상태 ================= -->
+        <!-- 로그인 한 상태 -->
         <div class="auth-menu"
              sec:authorize="isAuthenticated()">
 
-            <span class="username">
-
-                <span sec:authentication="name"></span>
+            <span class="user-badge">
+                👤
+                <span sec:authentication="name">
+                    USER
+                </span>
                 님
-
             </span>
 
-            <a th:href="@{/logout}">
+            <a th:href="@{/logout}"
+               class="logout-link">
                 로그아웃
             </a>
 

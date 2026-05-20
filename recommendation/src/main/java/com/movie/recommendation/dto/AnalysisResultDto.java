@@ -20,20 +20,24 @@ public class AnalysisResultDto {
 
     /**
      * 긍정 확률
-     * 예: 87.0
      */
     private Double positivePercent;
 
     /**
      * 부정 확률
-     * 예: 13.0
      */
     private Double negativePercent;
 
     /**
      * AI 분석 코멘트
      */
-    private List<String> keywords;
+    private String aiComment;
+
+    /**
+     * AI 예상 평점
+     */
+    private Double predictedRating;
+
     /**
      * 추천 영화 목록
      */
